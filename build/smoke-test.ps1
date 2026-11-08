@@ -57,6 +57,21 @@ if (Test-Path (Join-Path $dataDir 'restore.json')) { $failures += 'restore.json 
 if ($after -ne $original) { $failures += "lid action not restored (expected $original, got $after)" }
 else { Write-Host "Crash recovery OK: lid action back to $after" }
 
+# --- Watchdog: restore when the process it guards disappears ------------------------------------------
+powercfg /setacvalueindex SCHEME_CURRENT SUB_BUTTONS LIDACTION 0
+powercfg /setactive SCHEME_CURRENT
+@{
+    FormatVersion = 1; SchemeGuid = $scheme; OriginalAc = $original; OriginalDc = $null
+    AppliedValue = 0; CreatedAt = (Get-Date).ToString('o'); ProcessId = 0
+} | ConvertTo-Json | Set-Content (Join-Path $dataDir 'restore.json') -Encoding UTF8
+$dummy = Start-Process -FilePath ping.exe -ArgumentList '-n 600 127.0.0.1' -WindowStyle Hidden -PassThru
+Start-Process -FilePath $alias -ArgumentList @('--watchdog', $dummy.Id, "`"$(Join-Path $dataDir 'restore.json')`"", "`"$(Join-Path $dataDir 'log.txt')`"")
+Start-Sleep -Seconds 3
+Stop-Process -Id $dummy.Id -Force   # the "app" is killed
+for ($i = 0; $i -lt 20 -and (Test-Path (Join-Path $dataDir 'restore.json')); $i++) { Start-Sleep -Milliseconds 500 }
+if ((Get-LidAc) -ne $original -or (Test-Path (Join-Path $dataDir 'restore.json'))) { $failures += 'watchdog did not restore the lid action' }
+else { Write-Host "Watchdog OK: lid action back to $original after the guarded process was killed" }
+
 # --- Idle footprint --------------------------------------------------------------------------------
 Start-Sleep -Seconds 10
 $proc.Refresh(); $cpu0 = $proc.TotalProcessorTime; $t0 = Get-Date

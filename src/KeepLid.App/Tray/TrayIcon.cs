@@ -37,7 +37,12 @@ internal sealed class TrayIcon : IDisposable
         _icons[TrayState.Guard] = Load("guard", size);
 
         Menu = new ContextMenuStrip { ShowCheckMargin = true, ShowImageMargin = false };
-        Menu.Opening += (_, e) => MenuOpening?.Invoke(Menu, e);
+        Menu.Items.Add("KeepLid"); // placeholder: an empty strip would not open
+        Menu.Opening += (_, e) =>
+        {
+            MenuOpening?.Invoke(Menu, e);
+            e.Cancel = false; // WinForms presets Cancel=true when the strip had no items
+        };
 
         _icon = new NotifyIcon
         {

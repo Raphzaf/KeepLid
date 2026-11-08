@@ -330,8 +330,9 @@ public partial class App : Application
 
     private void OnSessionEnding(object sender, SessionEndingCancelEventArgs e)
     {
+        // Restore and exit. If the user later cancels the sign-out, KeepLid is simply closed (nothing left modified).
         _log.Info($"Session ending ({e.ReasonSessionEnding}): restoring");
-        Cleanup();
+        Quit();
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -423,7 +424,7 @@ public partial class App : Application
         if (!_lid.IsApplied) return;
         if (_watchdog is { HasExited: false }) return;
         _watchdog?.Dispose();
-        _watchdog = Watchdog.Start(_log);
+        _watchdog = Watchdog.Start(_log, _paths);
     }
 
     private void ApplyHotkey(bool notifyOnFailure)
