@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeepLid — Help</title>
+  <style>
+    :root { color-scheme: light dark; --fg: #1b1f24; --muted: #57606a; --bg: #ffffff; --accent: #2f7cf6; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #e6edf3; --muted: #9da7b3; --bg: #0d1117; } }
+    body { font: 16px/1.6 "Segoe UI", system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; padding: 0 16px; }
+    main { max-width: 760px; margin: 40px auto; }
+    h1 { font-size: 1.8em; margin-bottom: .2em; }
+    h2 { font-size: 1.1em; margin-top: 1.6em; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    code { font-family: Consolas, monospace; font-size: .95em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>KeepLid help</h1>
+  <p class="muted">"Close the lid, your AI keeps working." · <a href="aide.html">Français</a> · <a href="privacy-en.html">Privacy policy</a></p>
+  <h2>1. Why does the screen turn off when I close the lid while KeepLid is on?</h2>
+  <p>That is normal and hardware: closing the lid turns off the built-in screen (lid sensor / hinge). KeepLid prevents <strong>sleep</strong>, not the internal screen from turning off. The PC keeps working: your AI agent, build or download keeps going. Open the lid to see the result.</p>
+  <h2>2. The menu shows "Lid closed: setup guide…" instead of a check box. Why?</h2>
+  <p>On some PCs (often company-managed ones, or depending on how Windows is set up), Windows only lets administrators change the power plan. KeepLid <strong>never</strong> asks for administrator rights; it detects this at startup and offers a guide to set "When I close the lid" to "Do nothing" yourself (30 seconds), then reminds you to set it back at the end. Sleep prevention works normally.</p>
+  <h2>3. Does it drain my battery?</h2>
+  <p>An awake PC uses more power than a sleeping one, especially with the lid closed and a heavy task. That is why the lid mode only acts <strong>on mains power</strong> by default; on battery it asks for your confirmation; and KeepLid turns itself off below <strong>20%</strong> battery and after <strong>2 hours</strong> with the lid closed on battery (both adjustable).</p>
+  <h2>4. Is it dangerous for my laptop?</h2>
+  <p>A running laptop must be able to get rid of its heat. <strong>Never leave it running in a closed bag</strong> or on a soft surface (bed, sofa). KeepLid does not read temperatures (that would require administrator rights): its safety limits are based on battery and time. Windows and the hardware keep their own thermal protections.</p>
+  <h2>5. Does KeepLid change my Windows settings?</h2>
+  <p>Only the "When I close the lid" setting of the active power plan, and only when you turn on the lid mode. The original value is saved <strong>before</strong> the change and put back automatically: when you turn it off, quit, sign out, shut down, when the PC sleeps and, after a crash, at the next launch. If you change that setting yourself meanwhile, KeepLid keeps your new choice.</p>
+  <h2>6. My PC crashed (or I killed KeepLid) during lid mode. Is my setting lost?</h2>
+  <p>No. A small watchdog process restores the setting if KeepLid is killed. If everything stopped at once (power cut), the restore happens at the <strong>next launch</strong> of KeepLid (turn on "Start with Windows" to make it automatic). You can also click Settings › "Restore original power settings now". Manual check: <code>powercfg /q SCHEME_CURRENT SUB_BUTTONS LIDACTION</code>.</p>
+  <h2>7. Does KeepLid send data? Do I need an account?</h2>
+  <p>No. KeepLid is 100% local: no internet connection, no telemetry, no account. See the privacy policy.</p>
+  <h2>8. How do I keep the PC awake until my AI agent finishes?</h2>
+  <p>Right-click the icon › Keep awake › "Until a process ends…", check the process (for example <code>claude</code>, <code>node</code>, <code>python</code>, <code>codex</code>, <code>cursor</code>, <code>ollama</code>, <code>code</code>) then Start. KeepLid turns off about 15 seconds after the last checked process exits and shows "Task finished".</p>
+  <h2>9. Does KeepLid simulate mouse moves?</h2>
+  <p>No. It uses the official Windows API (<code>SetThreadExecutionState</code>) that tells the system work is in progress. No keystroke or mouse move is simulated, and your screen lock still works unless you turn on "Keep the screen on".</p>
+  <h2>10. How do I uninstall KeepLid cleanly?</h2>
+  <p>Quit KeepLid (right-click › "Quit (restores everything)"): every setting is put back. Then Windows Settings › Apps › KeepLid › Uninstall. Its files (preferences, log) are removed with the app; nothing is left in the registry.</p>
+  <p class="muted" style="margin-top:2.5em">Contact: &lt;SUPPORT_EMAIL&gt; · KeepLid is an independent app, not affiliated with the publishers of the tools mentioned.</p>
+</main>
+</body>
+</html>

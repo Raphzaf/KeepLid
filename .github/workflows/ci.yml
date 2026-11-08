@@ -46,7 +46,6 @@ jobs:
           path: |
             artifacts/*.msixupload
             artifacts/*.msixbundle
-            artifacts/*.msix
             artifacts/KeepLidTest.cer
       - name: Smoke test (install, crash recovery, idle CPU / memory)
         shell: powershell

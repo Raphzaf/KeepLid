@@ -19,6 +19,9 @@ function Get-LidAc {
     throw "Cannot read the lid action:`n$out"
 }
 
+# On machines without a lid (CI VMs) Windows hides the lid setting from 'powercfg /q': unhide it.
+powercfg -attributes SUB_BUTTONS LIDACTION -ATTRIB_HIDE
+
 # --- Install ---------------------------------------------------------------------------------------
 Import-Certificate -FilePath $CertificatePath -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
 Add-AppxPackage -Path $MsixPath

@@ -8,6 +8,8 @@
     <RootNamespace>KeepLid.Core</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <SatelliteResourceLanguages>en;fr</SatelliteResourceLanguages>
+    <!-- Needed when the Visual Studio packaging project builds the app for a specific RID. -->
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="KeepLid.Core.Tests" />

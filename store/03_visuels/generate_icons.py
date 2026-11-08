@@ -126,7 +126,8 @@ def main() -> None:
     # --- MSIX scale-* assets -------------------------------------------------------------------------
     for name, (w, h) in MSIX_LOGOS.items():
         for scale, factor in SCALES.items():
-            pw, ph = int(round(w * factor)), int(round(h * factor))
+            # Round half up (62.5 -> 63): MSIX validates exact sizes, Python's round() is half-to-even.
+            pw, ph = int(w * factor + 0.5), int(h * factor + 0.5)
             if w == h and name != "SplashScreen":
                 img = render(plated if name != "Square44x44Logo" else unplated, pw)
             else:
