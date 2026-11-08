@@ -114,7 +114,7 @@ Claude Code
 ## Informations complémentaires
 * **Catégorie** : Utilitaires et outils (sous-catégorie : —).
 * **Configuration requise** : Windows 10 version 2004 (build 19041) ou ultérieure ; portable recommandé pour le mode capot.
-* **Copyright** : `© 2026 <NOM_EDITEUR>`
+* **Copyright** : `© 2026 RaphZaf`
 * **Site web** : `https://raphzaf.github.io/KeepLid/`
 * **Contact support** : `<EMAIL_SUPPORT>`
 * **Politique de confidentialité** : `https://raphzaf.github.io/KeepLid/privacy-fr.html`

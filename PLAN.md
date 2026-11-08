@@ -38,7 +38,7 @@ Le développement se fait dans un conteneur **Linux** :
 | 1b | ✅ App WPF (compile sans avertissement, smoke test CI : démarrage, restauration après crash, chien de garde, 0 % CPU au repos) |
 | 1c | ✅ MSIX x64 + ARM64, bundle, `.msixupload` (script + projet Visual Studio), icônes générées |
 | 2 | ✅ tests xUnit, `docs/TESTS_MANUELS.md`, WACK en CI |
-| 3 | ✅ `store/` complet (marqueurs `<EMAIL_SUPPORT>`, `<NOM_EDITEUR>` à remplacer) |
+| 3 | ✅ `store/` complet (marqueur `<EMAIL_SUPPORT>` à remplacer ; éditeur : RaphZaf) |
 | 4 | ✅ docs, README, CHANGELOG ; paquets produits par la CI (artefact `keeplid-packages`) |
 
 ## Décisions techniques

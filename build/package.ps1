@@ -12,9 +12,8 @@
   Requirements: Windows 10/11, .NET 8 SDK, Windows 10/11 SDK (makeappx.exe, makepri.exe, signtool.exe).
 
 .EXAMPLE
-  # Store build (identity values from Partner Center > Product identity):
-  .\build\package.ps1 -Version 1.0.0.0 -IdentityName 12345KeepLid.KeepLid `
-      -Publisher "CN=00000000-0000-0000-0000-000000000000" -PublisherDisplayName "Your publisher name"
+  # Store build: identity read from Package.appxmanifest (keep it equal to Partner Center > Product identity):
+  .\build\package.ps1 -Version 1.0.0.0
 
 .EXAMPLE
   # Local test build, signed with a self-signed certificate (see docs/BUILD_ET_PACKAGING.md):
@@ -24,9 +23,11 @@
 param(
     [string]$Version = '1.0.0.0',
     [string[]]$Architectures = @('x64', 'arm64'),
-    [string]$IdentityName = 'KeepLid',
-    [string]$Publisher = 'CN=KeepLid Test',
-    [string]$PublisherDisplayName = 'KeepLid',
+    # Identity overrides. By default the values of src\KeepLid.Package\Package.appxmanifest are used
+    # (they must match Partner Center > Product identity for a Store upload).
+    [string]$IdentityName,
+    [string]$Publisher,
+    [string]$PublisherDisplayName,
     [string]$OutputDir = (Join-Path $PSScriptRoot '..\artifacts'),
     [string]$CertificatePath,
     [SecureString]$CertificatePassword,
@@ -79,11 +80,15 @@ foreach ($arch in $Architectures) {
 
     # Manifest: resolve the Visual Studio tokens and the identity.
     [xml]$manifest = Get-Content (Join-Path $packageProject 'Package.appxmanifest') -Raw
-    $manifest.Package.Identity.Name = $IdentityName
-    $manifest.Package.Identity.Publisher = $Publisher
+    if ($IdentityName) { $manifest.Package.Identity.Name = $IdentityName }
+    if ($Publisher) { $manifest.Package.Identity.Publisher = $Publisher }
+    if ($PublisherDisplayName) { $manifest.GetElementsByTagName('PublisherDisplayName')[0].InnerText = $PublisherDisplayName }
     $manifest.Package.Identity.Version = $Version
     $manifest.Package.Identity.SetAttribute('ProcessorArchitecture', $arch)
-    $manifest.GetElementsByTagName('PublisherDisplayName')[0].InnerText = $PublisherDisplayName
+    if ($arch -eq $Architectures[0]) {
+        Write-Host ("Identity: Name={0}  Publisher={1}  PublisherDisplayName={2}" -f $manifest.Package.Identity.Name,
+            $manifest.Package.Identity.Publisher, $manifest.GetElementsByTagName('PublisherDisplayName')[0].InnerText)
+    }
     $text = $manifest.OuterXml.Replace('$targetnametoken$', 'KeepLid.App\KeepLid').Replace('$targetentrypoint$', 'Windows.FullTrustApplication')
     $manifestPath = Join-Path $layout 'AppxManifest.xml'
     [System.IO.File]::WriteAllText($manifestPath, $text, (New-Object System.Text.UTF8Encoding($false)))

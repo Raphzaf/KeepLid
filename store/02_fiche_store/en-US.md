@@ -114,7 +114,7 @@ Claude Code
 ## Additional information
 * **Category**: Utilities & tools.
 * **System requirements**: Windows 10 version 2004 (build 19041) or later; a laptop is recommended for the lid mode.
-* **Copyright**: `© 2026 <PUBLISHER_NAME>`
+* **Copyright**: `© 2026 RaphZaf`
 * **Website**: `https://raphzaf.github.io/KeepLid/`
 * **Support contact**: `<SUPPORT_EMAIL>`
 * **Privacy policy**: `https://raphzaf.github.io/KeepLid/privacy-en.html`

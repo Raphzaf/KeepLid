@@ -5,8 +5,10 @@
   * Used by build/package.ps1, which replaces the same tokens and the Identity values.
   Both put the app in a "KeepLid.App\" sub-folder of the package (Visual Studio layout), hence the explicit
   "KeepLid.App\KeepLid.exe" in the extensions (Visual Studio only resolves the tokens on <Application>).
-  Identity Name / Publisher below are LOCAL TEST values: for the Store, use the values from
-  Partner Center › Product identity (see store/01_identite/identite.md).
+  Identity Name, Publisher and PublisherDisplayName MUST be the values of Partner Center ›
+  Product management › Product identity (see store/01_identite/identite.md): the Store rejects any
+  other value. The CI signs its local-test packages with a throw-away certificate whose subject is
+  this same Publisher, so one build serves both the Store upload and local tests.
 -->
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -19,7 +21,7 @@
 
   <Properties>
     <DisplayName>KeepLid</DisplayName>
-    <PublisherDisplayName>KeepLid</PublisherDisplayName>
+    <PublisherDisplayName>RaphZaf</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 

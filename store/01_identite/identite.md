@@ -5,7 +5,7 @@
 | Nom réservé | **KeepLid** (alternatives si pris : « KeepLid – Keep Awake », « KeepLid Awake ») | Partner Center › Applications et jeux › Nouveau produit › *Application MSIX ou PWA* › Réserver le nom | ☐ à faire |
 | Package/Identity/Name | `<valeur de Partner Center>` (ex. `12345Editeur.KeepLid`) | Partner Center › Gestion des produits › **Identité du produit** | ☐ à recopier |
 | Package/Identity/Publisher | `CN=<GUID de Partner Center>` (ex. `CN=1A2B3C4D-…`) | idem | ☐ à recopier |
-| Package/Properties/PublisherDisplayName | `<nom d'éditeur affiché>` | idem | ☐ à recopier |
+| Package/Properties/PublisherDisplayName | **`RaphZaf`** (« nom complet d'éditeur » du compte) | idem | ✅ dans le manifeste |
 | Package Family Name (PFN) | `<…>_<hash>` | idem (information) | — |
 | Store ID | `9XXXXXXXXXXX` | idem (lien `ms-windows-store://pdp/?ProductId=…`) | — |
 | Version | **1.0.0.0** (le 4ᵉ nombre doit rester 0 pour le Store) | `build/package.ps1 -Version` / manifeste | ✅ |
@@ -17,17 +17,13 @@
 
 ## Où reporter les valeurs d'identité
 
-Deux méthodes, au choix :
+**Une seule source : `src/KeepLid.Package/Package.appxmanifest`** (`<Identity Name=… Publisher=…>` et
+`<PublisherDisplayName>`). Le script `build/package.ps1`, le projet Visual Studio et la CI la lisent tous.
+La CI signe ses paquets de test avec un certificat jetable dont le sujet est ce même `Publisher` : le même build
+donne le `.msixupload` pour le Store **et** des paquets installables en local.
 
-1. **Ligne de commande (recommandé, reproductible)** — les passer à `build/package.ps1` :
-   ```powershell
-   .\build\package.ps1 -Version 1.0.0.0 `
-     -IdentityName "<Package/Identity/Name>" `
-     -Publisher "<Package/Identity/Publisher>" `
-     -PublisherDisplayName "<Package/Properties/PublisherDisplayName>"
-   ```
-2. **Visual Studio** — ouvrir `KeepLid.Store.sln`, clic droit sur *KeepLid.Package* › *Publier* ›
-   *Associer l'application au Store…* : Visual Studio réécrit `Package.appxmanifest` avec ces valeurs.
+Le Store refuse le paquet si l'une des trois valeurs diffère de Partner Center (erreur constatée avec les valeurs de
+test : « L'élément PublisherDisplayName … est KeepLid, qui ne correspond pas à votre nom complet d'éditeur : RaphZaf »).
 
-Les valeurs `KeepLid` / `CN=KeepLid Test` présentes dans `src/KeepLid.Package/Package.appxmanifest` servent
-uniquement aux tests locaux (certificat auto-signé).
+Avec Visual Studio, *KeepLid.Package › Publier › Associer l'application au Store…* écrit ces valeurs dans le même
+fichier.

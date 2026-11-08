@@ -5,7 +5,8 @@ Ordre recommandé. Chaque case renvoie au fichier prêt à copier-coller.
 ## A. Avant Partner Center (une fois)
 - [ ] Compte développeur Microsoft (individuel ou entreprise) actif — <https://partner.microsoft.com/dashboard>
 - [ ] Profil de paiement et formulaire fiscal remplis (*Paramètres du compte › Profil de paiement / Profil fiscal*) — obligatoire pour une app payante
-- [ ] Décider la licence du code et l'éditeur affiché (`<NOM_EDITEUR>`), l'e-mail de support (`<EMAIL_SUPPORT>`) ; remplacer ces marqueurs dans `store/` (`grep -rn "<EMAIL_SUPPORT>\|<SUPPORT_EMAIL>\|<NOM_EDITEUR>\|<PUBLISHER_NAME>" store`)
+- [x] Éditeur affiché : **RaphZaf** (doit être identique au `PublisherDisplayName` du manifeste)
+- [ ] E-mail de support (`<EMAIL_SUPPORT>`) : remplacer ce marqueur dans `store/` (`grep -rn "<EMAIL_SUPPORT>\|<SUPPORT_EMAIL>" store`)
 - [ ] Publier les pages de confidentialité / aide : *Settings › Pages › Source : GitHub Actions*, puis lancer le workflow `pages` (dépôt public ou plan GitHub payant ; sinon héberger `store/04_confidentialite/` ailleurs)
 - [ ] Vérifier que `https://raphzaf.github.io/KeepLid/privacy-fr.html` et `privacy-en.html` s'ouvrent sans connexion
 

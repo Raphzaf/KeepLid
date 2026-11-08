@@ -29,15 +29,16 @@ dotnet run --project src/KeepLid.App        # lance l'app non empaquetée (sans 
 
 ### Chemin A — ligne de commande
 
-Récupérer d'abord dans Partner Center › *Gestion des produits* › **Identité du produit** les trois valeurs
-`Package/Identity/Name`, `Package/Identity/Publisher`, `Package/Properties/PublisherDisplayName`, puis :
+Les trois valeurs de Partner Center › *Gestion des produits* › **Identité du produit** (`Package/Identity/Name`,
+`Package/Identity/Publisher`, `Package/Properties/PublisherDisplayName`) doivent figurer dans
+`src/KeepLid.Package/Package.appxmanifest` (voir `store/01_identite/identite.md`). Ensuite :
 
 ```powershell
-.\build\package.ps1 -Version 1.0.0.0 `
-  -IdentityName "12345Editeur.KeepLid" `
-  -Publisher "CN=00000000-0000-0000-0000-000000000000" `
-  -PublisherDisplayName "Nom de l'éditeur"
+.\build\package.ps1 -Version 1.0.0.0
 ```
+
+(`-IdentityName`, `-Publisher`, `-PublisherDisplayName` permettent de les surcharger ponctuellement.)
+La CI produit le même `.msixupload` : artefact **keeplid-packages** du workflow **ci**.
 
 Le script : lance les tests ; publie l'app **autonome** (`--self-contained`, aucun runtime .NET requis chez
 l'utilisateur) pour `win-x64` et `win-arm64` ; génère `resources.pri` (`makepri`, langues en-US + fr-FR) ;
@@ -73,17 +74,19 @@ msbuild src\KeepLid.Package\KeepLid.Package.wapproj /restore /p:Configuration=Re
 
 ## 3. Tester le paquet en local (certificat de test)
 
-Le `Publisher` du manifeste doit être **identique** au sujet du certificat. Valeur par défaut des tests : `CN=KeepLid Test`.
+Le `Publisher` du manifeste doit être **identique** au sujet du certificat : utiliser la valeur `Publisher` du
+manifeste (ex. `CN=1A2B3C4D-…`) comme `-Subject` ci-dessous.
 
 1. Créer le certificat (une fois, PowerShell **non** élevé) :
    ```powershell
-   $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=KeepLid Test" `
+   $subject = ([xml](Get-Content src\KeepLid.Package\Package.appxmanifest -Raw)).Package.Identity.Publisher
+   $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject $subject `
      -CertStoreLocation Cert:\CurrentUser\My -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
    $pwd = Read-Host -AsSecureString "Mot de passe du .pfx"
    Export-PfxCertificate -Cert $cert -FilePath .\KeepLidTest.pfx -Password $pwd
    Export-Certificate -Cert $cert -FilePath .\KeepLidTest.cer
    ```
-2. Construire et signer (identité de test par défaut) :
+2. Construire et signer :
    ```powershell
    .\build\package.ps1 -CertificatePath .\KeepLidTest.pfx -CertificatePassword $pwd
    ```
