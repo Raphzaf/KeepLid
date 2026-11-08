@@ -35,3 +35,24 @@ jobs:
         with:
           name: spike-results-${{ matrix.os }}
           path: C:\klspike\out
+
+  # Single-file spike executables to run by hand on a real Windows 10/11 laptop (non-elevated terminal).
+  spike-exe:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Publish single-file spike (x64 + ARM64)
+        run: |
+          dotnet publish spike/KeepLid.Spike -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o out/x64
+          dotnet publish spike/KeepLid.Spike -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true -o out/arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keeplid-spike-win-x64
+          path: out/x64/KeepLid.Spike.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keeplid-spike-win-arm64
+          path: out/arm64/KeepLid.Spike.exe

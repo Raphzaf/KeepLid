@@ -126,6 +126,9 @@ internal static class Program
             _ => "FAILURE: see steps",
         };
 
+        if (IsElevated())
+            Console.Error.WriteLine("WARNING: running elevated. Run from a NORMAL (non-admin) terminal for a meaningful result.");
+
         string json = JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true });
         Console.WriteLine(json);
         if (outPath != null) File.WriteAllText(outPath, json);
