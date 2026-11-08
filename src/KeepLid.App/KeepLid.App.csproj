@@ -16,6 +16,9 @@
     <ApplicationIcon>Assets\KeepLid.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <!-- The Store has no .NET 8 desktop runtime dependency: ship the runtime inside the package. -->
+    <SelfContained Condition="'$(RuntimeIdentifier)' != ''">true</SelfContained>
     <SatelliteResourceLanguages>en;fr</SatelliteResourceLanguages>
     <InvariantGlobalization>false</InvariantGlobalization>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

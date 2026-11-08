@@ -1,0 +1,77 @@
+# Build, test, package (MSIX x64 + ARM64, .msixbundle, .msixupload), install-and-run smoke test, WACK.
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core-tests-linux:
+    # KeepLid.Core is platform-independent: its tests also run on Linux.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet test tests/KeepLid.Core.Tests -c Release
+
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build (warnings are errors)
+        run: dotnet build KeepLid.sln -c Release
+      - name: Unit tests
+        run: dotnet test tests/KeepLid.Core.Tests -c Release --no-build
+      - name: Create a test signing certificate (CN must match the manifest Publisher)
+        shell: powershell
+        run: |
+          $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject 'CN=KeepLid Test' -CertStoreLocation Cert:\CurrentUser\My `
+            -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
+          $pwd = ConvertTo-SecureString 'ci-test' -AsPlainText -Force
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          Export-PfxCertificate -Cert $cert -FilePath out-test.pfx -Password $pwd | Out-Null
+          Export-Certificate -Cert $cert -FilePath artifacts\KeepLidTest.cer | Out-Null
+      - name: Package (x64 + ARM64, bundle, msixupload; signed with the test certificate)
+        shell: powershell
+        run: ./build/package.ps1 -SkipTests -CertificatePath out-test.pfx -CertificatePassword (ConvertTo-SecureString 'ci-test' -AsPlainText -Force)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keeplid-packages
+          path: |
+            artifacts/*.msixupload
+            artifacts/*.msixbundle
+            artifacts/*.msix
+            artifacts/KeepLidTest.cer
+      - name: Smoke test (install, crash recovery, idle CPU / memory)
+        shell: powershell
+        run: ./build/smoke-test.ps1 -MsixPath (Get-ChildItem artifacts\KeepLid_*_x64.msix).FullName -CertificatePath artifacts\KeepLidTest.cer
+      - name: Windows App Certification Kit
+        shell: powershell
+        run: ./build/run-wack.ps1 -MsixPath (Get-ChildItem artifacts\KeepLid_*_x64.msix).FullName -ReportPath artifacts\wack-report.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wack-report
+          path: artifacts/wack-report.xml
+          if-no-files-found: ignore
+
+  visual-studio-packaging-project:
+    # Checks that KeepLid.Package.wapproj (used from Visual Studio) still builds the Store upload.
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: microsoft/setup-msbuild@v2
+      - name: Build .msixupload with MSBuild
+        run: msbuild src\KeepLid.Package\KeepLid.Package.wapproj /restore /m /p:Configuration=Release /p:Platform=x64 /p:AppxBundle=Always "/p:AppxBundlePlatforms=x64|arm64" /p:UapAppxPackageBuildMode=StoreUpload
+      - name: List outputs
+        shell: powershell
+        run: Get-ChildItem artifacts\AppPackages -Recurse -Include *.msixupload, *.msixbundle | Select-Object FullName, Length
