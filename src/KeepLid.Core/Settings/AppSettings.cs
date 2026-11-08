@@ -25,6 +25,9 @@ public sealed class AppSettings
     /// </summary>
     public bool LidModeOnBattery { get; set; }
 
+    /// <summary>The battery confirmation was shown once (whatever the answer): it is not asked again.</summary>
+    public bool BatteryQuestionAsked { get; set; }
+
     /// <summary>Guard rail: stop when on battery below this percentage.</summary>
     public int BatteryThresholdPercent { get; set; } = 20;
 
