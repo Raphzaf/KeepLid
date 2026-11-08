@@ -29,6 +29,18 @@ Le développement se fait dans un conteneur **Linux** :
 | 3 | Dossier `store/` complet (arborescence imposée) | Tous les fichiers remplis, prêts à copier-coller |
 | 4 | `README.md`, `docs/BUILD_ET_PACKAGING.md`, `docs/ARCHITECTURE.md`, `CHANGELOG.md`, `artifacts/` | Livrables présents ; résumé final |
 
+## Avancement
+
+| # | Statut |
+|---|---|
+| 0 | ⛔ STOP déclenché (`ERROR_ACCESS_DENIED` sans admin sur Windows Server 2022/2025, exe nu et MSIX) — voir `docs/SPIKE_RESULT.md`. **Décision : option (a+)** — détection au démarrage, mode capot automatique si permis, guide pas à pas sinon. |
+| 1a | ✅ Core + 72 tests |
+| 1b | ✅ App WPF (compile sans avertissement, smoke test CI : démarrage, restauration après crash, chien de garde, 0 % CPU au repos) |
+| 1c | ✅ MSIX x64 + ARM64, bundle, `.msixupload` (script + projet Visual Studio), icônes générées |
+| 2 | ✅ tests xUnit, `docs/TESTS_MANUELS.md`, WACK en CI |
+| 3 | ✅ `store/` complet (marqueurs `<EMAIL_SUPPORT>`, `<NOM_EDITEUR>` à remplacer) |
+| 4 | ✅ docs, README, CHANGELOG ; paquets produits par la CI (artefact `keeplid-packages`) |
+
 ## Décisions techniques
 
 * **Interop** : `DllImport` explicites (lisibles), chaque signature et GUID référencé au fichier d'en-tête
@@ -38,7 +50,7 @@ Le développement se fait dans un conteneur **Linux** :
   n'est modifiée qu'après confirmation explicite (une seule fois, mémorisée).
 * **Restauration** : `restore.json` écrit **avant** toute écriture système ; restauration à la désactivation,
   à la sortie, `SessionEnding`, mise en veille / reprise, exception non gérée, et au lancement suivant.
-  En plus : un **processus chien de garde** (même exe, `--watchdog <pid>`) restaure si l'app est tuée
+  En plus : un **processus chien de garde** (même exe, `--watchdog <pid> <restore.json> <log>`) restaure si l'app est tuée
   (Gestionnaire des tâches) pendant que le mode capot est actif.
 * **Icône de notification** : `System.Windows.Forms.NotifyIcon` (aucune dépendance tierce).
 * **Notifications** : info-bulles de l'icône (affichées comme toasts par Windows 10/11).

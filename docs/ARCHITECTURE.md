@@ -13,7 +13,7 @@ KeepLid.sln
 │   ├── Abstractions/     IPowerSettings, IExecutionState, IPowerStatusProvider, IProcessProbe, IClock, ILog
 │   └── Resources/        Strings.resx (EN, neutre) + Strings.fr.resx (FR) → classe Strings générée par MSBuild
 ├── src/KeepLid.App       net8.0-windows10.0.19041 — WPF + NotifyIcon (WinForms)
-│   ├── Program.cs        point d'entrée : application normale OU « --watchdog <pid> »
+│   ├── Program.cs        point d'entrée : application normale OU « --watchdog <pid> <restore.json> <log> »
 │   ├── App.xaml.cs       racine de composition, événements Windows → contrôleur
 │   ├── Native/           DllImport (signatures vérifiées dans les en-têtes du Windows SDK 10.0.26100)
 │   ├── Platform/         implémentations Windows des abstractions, fenêtre de messages (capot, mode
@@ -85,7 +85,7 @@ sequenceDiagram
     L->>W: PowerGetActiveScheme + PowerRead{AC,DC}ValueIndex
     L->>F: Save {schéma, AC/DC d'origine, valeur appliquée=0}
     L->>W: PowerWrite{AC[,DC]}ValueIndex(0) + PowerSetActiveScheme
-    A-->>D: démarre « KeepLid.exe --watchdog <pid> »
+    A-->>D: démarre « KeepLid.exe --watchdog <pid> <restore.json réel> <log réel> »
     Note over A,W: … tâche en cours, capot fermé …
     U->>A: désactive / quitte / fin de session / veille / exception
     A->>L: Restore()

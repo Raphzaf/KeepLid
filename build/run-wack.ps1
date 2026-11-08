@@ -26,7 +26,8 @@ foreach ($req in $report.REPORT.REQUIREMENTS.REQUIREMENT) {
     foreach ($test in $req.TEST) {
         $result = $test.RESULT.'#cdata-section'
         if ($result -ne 'PASS') {
-            Write-Host ("[{0}] {1} / {2}" -f $result, $req.TITLE, $test.NAME)
+            $optional = if ($test.OPTIONAL -eq 'TRUE' -or $req.OPTIONAL -eq 'TRUE') { ' (optional)' } else { '' }
+            Write-Host ("[{0}{3}] {1} / {2}" -f $result, $req.TITLE, $test.NAME, $optional)
             foreach ($m in $test.MESSAGES.MESSAGE) { if ($m.TEXT) { Write-Host "    - $($m.TEXT)" } }
         }
     }

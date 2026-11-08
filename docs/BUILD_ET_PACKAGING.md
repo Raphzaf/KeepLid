@@ -109,11 +109,36 @@ PowerShell **administrateur**, sur le `.msix` x64 signé et approuvé (§3) :
 Ou interface graphique : menu Démarrer › *Windows App Cert Kit* › *Valider l'application du Store*.
 Le rapport XML (`wack-report.xml`) liste chaque test ; la CI l'exécute et publie le rapport (artefact `wack-report`).
 
+**Résultat CI (8 nov. 2026, run [42500017375](https://github.com/Raphzaf/KeepLid/actions/runs/42500017375), WACK du
+Windows SDK 10.0.26100, paquet x64) : `OVERALL_RESULT = PASS`.** Seul le test *Package sanity › Blocked executables*
+liste des éléments ; ce test n'empêche pas le résultat global « Réussi » et signale :
+
+* des chaînes « cmd », « reg », « bash », « MSBuild »… présentes dans les DLL du runtime .NET / WPF / WinForms
+  (faux positifs connus de toute application .NET autonome) ;
+* des références aux API de lancement de processus, dont celles de KeepLid, toutes légitimes : démarrage du chien de
+  garde (`KeepLid.exe --watchdog`), ouverture de l'Explorateur sur le journal, du Panneau de configuration (guide du
+  capot) et des liens d'aide / confidentialité dans le navigateur.
+
+Aucune action requise ; à mentionner si un testeur pose la question.
+
 ## 5. Test d'installation automatisé (CI)
 
 `build/smoke-test.ps1` (administrateur, machine jetable) : installe le `.msix`, simule un crash (action du capot à
-« Ne rien faire » + `restore.json` laissé dans le dossier de l'app), lance KeepLid, vérifie la **restauration**,
-mesure le CPU et la mémoire au repos, affiche le journal.
+« Ne rien faire » + `restore.json` laissé dans le dossier de l'app), lance KeepLid, vérifie la **restauration** ;
+teste le **chien de garde** (processus surveillé tué → restauration) ; mesure le CPU et la mémoire au repos ;
+affiche le journal.
+
+Résultat CI (Windows Server 2022, run 42500017375) :
+
+| Vérification | Résultat |
+|---|---|
+| Restauration au lancement après crash simulé | ✅ action du capot remise de 0 à 1, `restore.json` supprimé |
+| Chien de garde (processus tué) | ✅ restauration en ≈ 1 s |
+| CPU au repos (30 s) | ✅ 0,000 % |
+| Mémoire au repos | ✅ plage de travail privée 1,5 Mo (colonne « Mémoire » du Gestionnaire des tâches), plage de travail 5,1 Mo, octets privés 20 Mo |
+| Licence sur paquet non-Store | ✅ vérification ignorée (« package signature: Developer ») |
+
+Tailles : `.msix` x64 69 Mo, ARM64 65 Mo, `.msixupload` 133 Mo (runtime .NET 8 inclus).
 
 ## 6. Régénérer les icônes
 
