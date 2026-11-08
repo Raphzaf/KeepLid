@@ -35,13 +35,16 @@ public sealed class GuardRails
     public TimeSpan? LidClosedOnBatteryFor(DateTimeOffset now) =>
         _lidClosedOnBatterySince is { } since ? now - since : null;
 
-    /// <param name="lidModeActive">The lid override is part of the session (the lid timer only applies then).</param>
-    public GuardReason Evaluate(PowerStatus status, bool lidModeActive, DateTimeOffset now)
+    /// <remarks>
+    /// The lid timer runs whenever the lid is closed on battery during a session, whether the lid action was
+    /// changed by KeepLid or by the user through the guide: if the PC did not sleep, it is running lid closed.
+    /// </remarks>
+    public GuardReason Evaluate(PowerStatus status, DateTimeOffset now)
     {
         if (status.OnBattery && status.BatteryPercent is { } percent && percent < BatteryThresholdPercent)
             return GuardReason.LowBattery;
 
-        if (lidModeActive && LidClosed && status.OnBattery)
+        if (LidClosed && status.OnBattery)
         {
             _lidClosedOnBatterySince ??= now;
             if (now - _lidClosedOnBatterySince.Value >= MaxLidClosedOnBattery)

@@ -29,8 +29,14 @@ public enum StopReason
 /// <summary>What the user asked for when starting a session.</summary>
 public sealed record SessionOptions(EndCondition End, bool KeepDisplayOn, bool LidMode);
 
-public sealed class StateChangedEventArgs(AwakeState state, StopReason? stopReason, string? lidError) : EventArgs
+public sealed class StateChangedEventArgs(AwakeState state, StopReason? stopReason, string? lidError, bool lidReminder = false) : EventArgs
 {
+    /// <summary>
+    /// Guide mode only: the session ended while the lid action is still "Do nothing" (set by the user through the
+    /// guide), so the UI should remind the user to set it back.
+    /// </summary>
+    public bool LidReminder { get; } = lidReminder;
+
     public AwakeState State { get; } = state;
 
     /// <summary>Why the session stopped (null when it started or changed).</summary>
@@ -95,6 +101,12 @@ public sealed class AwakeController
 
     public bool LidPresent => _power.IsLidPresent;
 
+    /// <summary>
+    /// Result of the startup probe (see <see cref="LidOverride.ProbeAccess"/>). The automatic lid mode is only
+    /// used when <see cref="LidAccess.Allowed"/>; otherwise the UI offers the step-by-step guide.
+    /// </summary>
+    public LidAccess LidAccess { get; set; } = LidAccess.Unknown;
+
     /// <summary>True when the lid override is really in place right now.</summary>
     public bool LidOverrideApplied => _lid.IsApplied;
 
@@ -141,6 +153,8 @@ public sealed class AwakeController
 
         _execution.Release();
         _lid.Restore();
+        bool reminder = LidAccess == LidAccess.Denied && _lid.TryReadCurrent() is { } current &&
+                        (current.Ac == LidOverride.ActionDoNothing || current.Dc == LidOverride.ActionDoNothing);
         _timer = null;
         _watcher = null;
         Options = null;
@@ -150,7 +164,7 @@ public sealed class AwakeController
         State = guard ? AwakeState.GuardTripped : AwakeState.Inactive;
         LastGuardReason = guard ? reason : null;
         _log.Info($"Session stopped: {reason}");
-        StateChanged?.Invoke(this, new StateChangedEventArgs(State, reason, null));
+        StateChanged?.Invoke(this, new StateChangedEventArgs(State, reason, null, reminder));
     }
 
     /// <summary>Left click on the tray icon.</summary>
@@ -237,7 +251,7 @@ public sealed class AwakeController
         _guards.BatteryThresholdPercent = Settings.BatteryThresholdPercent;
         _guards.MaxLidClosedOnBattery = TimeSpan.FromMinutes(Settings.MaxLidClosedOnBatteryMinutes);
 
-        GuardReason guard = _guards.Evaluate(_status.GetStatus(), Options?.LidMode == true, now);
+        GuardReason guard = _guards.Evaluate(_status.GetStatus(), now);
         switch (guard)
         {
             case GuardReason.LowBattery:
@@ -254,7 +268,7 @@ public sealed class AwakeController
     /// <summary>Applies or removes the lid override; on failure the session continues without it.</summary>
     private string? ApplyLidMode(ref SessionOptions options)
     {
-        if (!options.LidMode || !_power.IsLidPresent)
+        if (!options.LidMode || LidAccess != LidAccess.Allowed)
         {
             _lid.Restore();
             if (options.LidMode) options = options with { LidMode = false };

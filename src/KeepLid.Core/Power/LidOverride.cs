@@ -2,6 +2,19 @@ using KeepLid.Core.Abstractions;
 
 namespace KeepLid.Core.Power;
 
+/// <summary>Can KeepLid change the lid close action on this PC? (Phase 0 spike: depends on the power scheme ACL.)</summary>
+public enum LidAccess
+{
+    /// <summary>Not probed yet.</summary>
+    Unknown,
+    /// <summary>The machine reports no lid (desktop PC): lid features are hidden.</summary>
+    NoLid,
+    /// <summary>Writes are allowed without elevation: automatic lid mode.</summary>
+    Allowed,
+    /// <summary>Writes are refused (ERROR_ACCESS_DENIED): the step-by-step guide is offered instead.</summary>
+    Denied,
+}
+
 public enum RestoreOutcome
 {
     /// <summary>No pending change: nothing to restore.</summary>
@@ -32,6 +45,45 @@ public sealed class LidOverride(IPowerSettings power, IRestoreStore store, ILog 
     public bool IsApplied
     {
         get { lock (_gate) return store.Exists; }
+    }
+
+    /// <summary>
+    /// Finds out whether the lid action may be written, WITHOUT changing anything: the value already in place
+    /// is written back to itself. Call after <see cref="Restore"/> at startup.
+    /// </summary>
+    public LidAccess ProbeAccess()
+    {
+        if (!power.IsLidPresent) return LidAccess.NoLid;
+        lock (_gate)
+        {
+            try
+            {
+                Guid scheme = power.GetActiveScheme();
+                LidActions current = power.ReadLidActions(scheme);
+                power.WriteLidActions(scheme, current.Ac, null); // same value: no effective change
+                log.Info("Lid access probe: write allowed (automatic lid mode)");
+                return LidAccess.Allowed;
+            }
+            catch (Exception ex)
+            {
+                log.Warn($"Lid access probe: write refused ({(ex as PowerSettingsException)?.ErrorCode.ToString() ?? ex.Message}); guide mode");
+                return LidAccess.Denied;
+            }
+        }
+    }
+
+    /// <summary>Current lid actions of the active scheme, or null if they cannot be read.</summary>
+    public LidActions? TryReadCurrent()
+    {
+        try
+        {
+            return power.ReadLidActions(power.GetActiveScheme());
+        }
+        catch (Exception ex)
+        {
+            log.Warn("Cannot read the current lid action: " + ex.Message);
+            return null;
+        }
     }
 
     /// <summary>
