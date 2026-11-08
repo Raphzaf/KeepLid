@@ -1,0 +1,58 @@
+# Phase 0: run the feasibility spike on a real Windows machine, as admin and as a standard user,
+# both as a bare exe and from an MSIX package. Results are printed in the log and uploaded.
+name: spike
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'spike/**'
+      - '.github/workflows/spike.yml'
+
+jobs:
+  spike:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, windows-2025]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Publish spike (self-contained win-x64)
+        run: dotnet publish spike/KeepLid.Spike -c Release -r win-x64 --self-contained true -o out/spike
+      - name: Show current power scheme (powercfg)
+        run: |
+          powercfg /getactivescheme
+          powercfg /q SCHEME_CURRENT SUB_BUTTONS LIDACTION
+      - name: Run spike (4 configurations)
+        shell: powershell   # Windows PowerShell 5.1: the Appx module does not load in pwsh 7 on Server 2022
+        run: ./spike/run-spike.ps1 -PublishDir "$PWD/out/spike"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spike-results-${{ matrix.os }}
+          path: C:\klspike\out
+
+  # Single-file spike executables to run by hand on a real Windows 10/11 laptop (non-elevated terminal).
+  spike-exe:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Publish single-file spike (x64 + ARM64)
+        run: |
+          dotnet publish spike/KeepLid.Spike -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o out/x64
+          dotnet publish spike/KeepLid.Spike -c Release -r win-arm64 --self-contained true -p:PublishSingleFile=true -o out/arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keeplid-spike-win-x64
+          path: out/x64/KeepLid.Spike.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keeplid-spike-win-arm64
+          path: out/arm64/KeepLid.Spike.exe

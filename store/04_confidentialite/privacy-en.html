@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeepLid — Privacy policy</title>
+  <style>
+    :root { color-scheme: light dark; --fg: #1b1f24; --muted: #57606a; --bg: #ffffff; --accent: #2f7cf6; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #e6edf3; --muted: #9da7b3; --bg: #0d1117; } }
+    body { font: 16px/1.6 "Segoe UI", system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; padding: 0 16px; }
+    main { max-width: 760px; margin: 40px auto; }
+    h1 { font-size: 1.8em; margin-bottom: .2em; }
+    h2 { font-size: 1.2em; margin-top: 1.8em; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    code { font-family: Consolas, monospace; font-size: .95em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>KeepLid privacy policy</h1>
+  <p class="muted">Last updated: November 8, 2026 · <a href="privacy-fr.html">Version française</a></p>
+
+  <h2>In short</h2>
+  <p><strong>KeepLid does not collect, transmit or sell any data.</strong> The app runs entirely on your computer: it
+     makes no internet connection and uses no telemetry, no advertising, no account and no third-party service.</p>
+
+  <h2>Data handled on your computer</h2>
+  <p>To work, KeepLid only stores the following files in its local data folder
+     (<code>%LOCALAPPDATA%\KeepLid\</code>, redirected by Windows to the app's private folder):</p>
+  <ul>
+    <li><code>settings.json</code>: your preferences (durations, thresholds, shortcut, favorite process names);</li>
+    <li><code>restore.json</code>: temporarily, the original values of the "lid close" setting so they can be restored;
+        this file is deleted as soon as they are;</li>
+    <li><code>log.txt</code>: a technical log (1 MB max, rotated) of the app's actions (turn on/off, restore, errors),
+        useful if you ask for support.</li>
+  </ul>
+  <p>For the "until a process ends" feature, KeepLid reads the <em>names</em> of running processes, in memory only and
+     only to know whether the chosen process is still running. This list is neither stored nor transmitted. KeepLid
+     also reads the battery and lid state for its safety limits.</p>
+  <p>These files never leave your computer. You can look at them at any time (Settings › "Open the log"); they are
+     removed when you uninstall the app.</p>
+
+  <h2>System settings changed</h2>
+  <p>When you turn on the lid mode, and only if Windows allows it without administrator rights, KeepLid temporarily
+     changes the "When I close the lid" action of the active power plan. The original value is saved before the change
+     and restored automatically. KeepLid changes no other setting, never asks for administrator rights and does not
+     write to the registry.</p>
+
+  <h2>License and Microsoft Store</h2>
+  <p>The license check (purchase or trial) is performed by Windows and the Microsoft Store, under the
+     <a href="https://privacy.microsoft.com/en-us/privacystatement">Microsoft Privacy Statement</a>. KeepLid receives
+     no personal information in the process, only the license status.</p>
+
+  <h2>Links</h2>
+  <p>The "Privacy policy" and "Help" links open this page or the help page in your browser; the app itself does not
+     connect.</p>
+
+  <h2>Children</h2>
+  <p>KeepLid collects no data, including from children.</p>
+
+  <h2>Contact</h2>
+  <p>Questions: <a href="mailto:&lt;SUPPORT_EMAIL&gt;">&lt;SUPPORT_EMAIL&gt;</a> — &lt;PUBLISHER_NAME&gt;.</p>
+
+  <h2>Changes</h2>
+  <p>Any change to this policy will be published on this page with a new "last updated" date.</p>
+</main>
+</body>
+</html>

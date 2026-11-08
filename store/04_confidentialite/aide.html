@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeepLid — Aide</title>
+  <style>
+    :root { color-scheme: light dark; --fg: #1b1f24; --muted: #57606a; --bg: #ffffff; --accent: #2f7cf6; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #e6edf3; --muted: #9da7b3; --bg: #0d1117; } }
+    body { font: 16px/1.6 "Segoe UI", system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; padding: 0 16px; }
+    main { max-width: 760px; margin: 40px auto; }
+    h1 { font-size: 1.8em; margin-bottom: .2em; }
+    h2 { font-size: 1.1em; margin-top: 1.6em; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    code { font-family: Consolas, monospace; font-size: .95em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Aide de KeepLid</h1>
+  <p class="muted">« Ferme le capot, ton IA continue. » · <a href="help.html">English</a> · <a href="privacy-fr.html">Politique de confidentialité</a></p>
+  <h2>1. 1. Pourquoi l'écran s'éteint-il quand je ferme le capot, alors que KeepLid est actif ?</h2>
+  <p>C'est normal et matériel : fermer le capot coupe l'écran intégré (capteur de capot / charnière). KeepLid empêche la <strong>mise en veille</strong>, pas l'extinction de l'écran interne. Le PC continue de travailler : votre agent IA, votre compilation ou votre téléchargement avancent. Rouvrez le capot pour voir le résultat.</p>
+  <h2>2. 2. Le menu propose « Capot fermé : guide de réglage… » au lieu d'une case à cocher. Pourquoi ?</h2>
+  <p>Sur certains PC (souvent ceux gérés par une entreprise, ou selon la configuration de Windows), Windows réserve la modification du mode d'alimentation aux administrateurs. KeepLid ne demande <strong>jamais</strong> de droits administrateur ; il le détecte au démarrage et vous propose un guide pour régler vous-même « Lorsque je ferme le capot » sur « Ne rien faire » (30 secondes), puis vous rappelle de le remettre à la fin. L'anti-veille fonctionne normalement.</p>
+  <h2>3. 3. Est-ce que ça vide ma batterie ?</h2>
+  <p>Un PC éveillé consomme plus qu'un PC en veille, surtout capot fermé avec une tâche lourde. C'est pourquoi : le mode capot n'agit par défaut que <strong>sur secteur</strong> ; sur batterie, il demande votre confirmation ; KeepLid se désactive tout seul sous <strong>20 %</strong> de batterie et après <strong>2 h</strong> capot fermé sur batterie (réglables).</p>
+  <h2>4. 4. Est-ce dangereux pour mon portable ?</h2>
+  <p>Un portable allumé doit pouvoir évacuer sa chaleur. <strong>Ne le laissez jamais allumé dans un sac fermé</strong> ni sur une surface molle (lit, canapé). KeepLid ne lit pas les températures (cela exigerait des droits administrateur) : ses garde-fous portent sur la batterie et la durée. Windows et le matériel gardent leurs propres protections thermiques.</p>
+  <h2>5. 5. KeepLid modifie-t-il mes réglages Windows ?</h2>
+  <p>Uniquement le réglage « Lorsque je ferme le capot » du mode d'alimentation actif, et seulement quand vous activez le mode capot. La valeur d'origine est enregistrée <strong>avant</strong> la modification et remise automatiquement : à la désactivation, en quittant, à la fermeture de session, à l'arrêt, à la mise en veille et, après un plantage, au lancement suivant. Si vous changez vous-même ce réglage entre-temps, KeepLid respecte votre nouveau choix.</p>
+  <h2>6. 6. Mon PC a planté (ou j'ai tué KeepLid) pendant le mode capot. Mon réglage est-il perdu ?</h2>
+  <p>Non. Un petit processus « chien de garde » restaure le réglage si KeepLid est tué. Si tout s'est arrêté d'un coup (coupure de courant), la restauration a lieu au <strong>prochain lancement</strong> de KeepLid (activez « Lancer au démarrage de Windows » pour qu'elle soit automatique). Vous pouvez aussi cliquer sur Réglages › « Restaurer les réglages d'alimentation d'origine maintenant ». Vérification manuelle : <code>powercfg /q SCHEME_CURRENT SUB_BUTTONS LIDACTION</code>.</p>
+  <h2>7. 7. KeepLid envoie-t-il des données ? Faut-il un compte ?</h2>
+  <p>Non. KeepLid est 100 % local : aucune connexion internet, aucune télémétrie, aucun compte. Voir la politique de confidentialité.</p>
+  <h2>8. 8. Comment garder le PC éveillé jusqu'à la fin de mon agent IA ?</h2>
+  <p>Clic droit sur l'icône › Garder éveillé › « Jusqu'à la fin d'un processus… », cochez le processus (par exemple <code>claude</code>, <code>node</code>, <code>python</code>, <code>codex</code>, <code>cursor</code>, <code>ollama</code>, <code>code</code>) puis Démarrer. KeepLid se coupe environ 15 secondes après la fin du dernier processus coché et affiche « Tâche terminée ».</p>
+  <h2>9. 9. KeepLid simule-t-il des mouvements de souris ?</h2>
+  <p>Non. Il utilise l'API officielle de Windows (<code>SetThreadExecutionState</code>) qui indique au système qu'une tâche est en cours. Aucune touche ni mouvement de souris n'est simulé, et votre verrouillage de session reste actif si vous n'activez pas « Garder l'écran allumé ».</p>
+  <h2>10. 10. Comment désinstaller KeepLid proprement ?</h2>
+  <p>Quittez KeepLid (clic droit › « Quitter (restaure tout) ») : tous les réglages sont remis. Puis Paramètres Windows › Applications › KeepLid › Désinstaller. Ses fichiers (préférences, journal) sont supprimés avec l'application ; rien n'est laissé dans le registre.</p>
+  <p class="muted" style="margin-top:2.5em">Contact : &lt;EMAIL_SUPPORT&gt; · KeepLid est une application indépendante, sans affiliation avec les éditeurs des outils cités.</p>
+</main>
+</body>
+</html>

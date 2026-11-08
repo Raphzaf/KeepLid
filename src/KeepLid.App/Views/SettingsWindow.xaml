@@ -1,0 +1,77 @@
+<Window x:Class="KeepLid.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:KeepLid.Core.Resources;assembly=KeepLid.Core"
+        Style="{StaticResource KeepLidWindow}"
+        Title="{x:Static res:Strings.Settings_Title}"
+        Width="580">
+    <DockPanel Margin="20,10,20,16">
+        <!-- Footer -->
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="{x:Static res:Strings.Settings_Save}" IsDefault="True" Click="OnSave" />
+                <Button Content="{x:Static res:Strings.Settings_Cancel}" IsCancel="True" />
+            </StackPanel>
+            <TextBlock x:Name="VersionText" Style="{StaticResource Hint}" VerticalAlignment="Center" />
+        </DockPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="620">
+            <StackPanel>
+                <!-- General -->
+                <TextBlock Style="{StaticResource Heading}" Text="{x:Static res:Strings.Settings_General}" />
+                <CheckBox x:Name="StartWithWindows" Content="{x:Static res:Strings.Settings_StartWithWindows}" />
+                <TextBlock x:Name="StartupHint" Style="{StaticResource Hint}" Visibility="Collapsed" Margin="22,0,0,4" />
+                <CheckBox x:Name="KeepDisplayOnDefault" Content="{x:Static res:Strings.Settings_KeepDisplayOnDefault}" />
+                <CheckBox x:Name="LidModeDefault" Content="{x:Static res:Strings.Settings_LidModeDefault}" />
+
+                <!-- Lid -->
+                <TextBlock Style="{StaticResource Heading}" Text="{x:Static res:Strings.Settings_Lid}" />
+                <TextBlock x:Name="LidStatus" TextWrapping="Wrap" />
+                <TextBlock x:Name="LidCurrent" Style="{StaticResource Hint}" />
+                <CheckBox x:Name="LidOnBattery" Content="{x:Static res:Strings.Settings_LidOnBattery}" Checked="OnLidOnBatteryChecked" />
+                <Button x:Name="OpenGuide" HorizontalAlignment="Left" Margin="0,4,0,0" Content="{x:Static res:Strings.Settings_OpenGuide}" Click="OnOpenGuide" Visibility="Collapsed" />
+
+                <!-- Guard rails -->
+                <TextBlock Style="{StaticResource Heading}" Text="{x:Static res:Strings.Settings_Guards}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{x:Static res:Strings.Settings_BatteryThreshold}" VerticalAlignment="Center" />
+                    <TextBox x:Name="BatteryThreshold" Grid.Column="1" Margin="0,3" />
+                    <TextBlock Grid.Row="1" Text="{x:Static res:Strings.Settings_MaxLidMinutes}" VerticalAlignment="Center" />
+                    <TextBox x:Name="MaxLidMinutes" Grid.Row="1" Grid.Column="1" Margin="0,3" />
+                </Grid>
+                <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.Settings_NoThermal}" />
+
+                <!-- Processes -->
+                <TextBlock Style="{StaticResource Heading}" Text="{x:Static res:Strings.Settings_Processes}" />
+                <TextBox x:Name="Processes" AcceptsReturn="True" Height="90" VerticalScrollBarVisibility="Auto" />
+
+                <!-- Hotkey -->
+                <CheckBox x:Name="HotkeyEnabled" Margin="0,14,0,4" Content="{x:Static res:Strings.Settings_HotkeyEnabled}" />
+                <TextBox x:Name="HotkeyBox" Width="220" HorizontalAlignment="Left" IsReadOnly="True"
+                         PreviewKeyDown="OnHotkeyKeyDown" IsEnabled="{Binding IsChecked, ElementName=HotkeyEnabled}" />
+                <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.Settings_HotkeyHint}" />
+
+                <!-- Maintenance and links -->
+                <Separator Margin="0,12" />
+                <WrapPanel>
+                    <Button Margin="0,0,6,6" Content="{x:Static res:Strings.Settings_Restore}" Click="OnRestore" />
+                    <Button Margin="0,0,6,6" Content="{x:Static res:Strings.Settings_OpenLog}" Click="OnOpenLog" />
+                </WrapPanel>
+                <TextBlock x:Name="RestoreResult" Style="{StaticResource Hint}" />
+                <WrapPanel Margin="0,6,0,0">
+                    <TextBlock Margin="0,0,16,0"><Hyperlink Click="OnPrivacy"><Run Text="{x:Static res:Strings.Settings_Privacy}" /></Hyperlink></TextBlock>
+                    <TextBlock Margin="0,0,16,0"><Hyperlink Click="OnHelp"><Run Text="{x:Static res:Strings.Settings_Help}" /></Hyperlink></TextBlock>
+                    <TextBlock><Hyperlink Click="OnWelcome"><Run Text="{x:Static res:Strings.Settings_ShowWelcome}" /></Hyperlink></TextBlock>
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

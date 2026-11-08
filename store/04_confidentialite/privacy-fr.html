@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KeepLid — Politique de confidentialité</title>
+  <style>
+    :root { color-scheme: light dark; --fg: #1b1f24; --muted: #57606a; --bg: #ffffff; --accent: #2f7cf6; }
+    @media (prefers-color-scheme: dark) { :root { --fg: #e6edf3; --muted: #9da7b3; --bg: #0d1117; } }
+    body { font: 16px/1.6 "Segoe UI", system-ui, sans-serif; color: var(--fg); background: var(--bg); margin: 0; padding: 0 16px; }
+    main { max-width: 760px; margin: 40px auto; }
+    h1 { font-size: 1.8em; margin-bottom: .2em; }
+    h2 { font-size: 1.2em; margin-top: 1.8em; }
+    .muted { color: var(--muted); }
+    a { color: var(--accent); }
+    code { font-family: Consolas, monospace; font-size: .95em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Politique de confidentialité de KeepLid</h1>
+  <p class="muted">Dernière mise à jour : 8 novembre 2026 · <a href="privacy-en.html">English version</a></p>
+
+  <h2>En résumé</h2>
+  <p><strong>KeepLid ne collecte, ne transmet et ne vend aucune donnée.</strong> L'application fonctionne entièrement
+     sur votre ordinateur : elle n'établit aucune connexion internet, n'utilise aucune télémétrie, aucune publicité,
+     aucun compte et aucun service tiers.</p>
+
+  <h2>Données traitées sur votre ordinateur</h2>
+  <p>Pour fonctionner, KeepLid enregistre uniquement les fichiers suivants, dans son dossier de données local
+     (<code>%LOCALAPPDATA%\KeepLid\</code>, redirigé par Windows vers le dossier privé de l'application) :</p>
+  <ul>
+    <li><code>settings.json</code> : vos préférences (durées, seuils, raccourci, noms de processus préférés) ;</li>
+    <li><code>restore.json</code> : temporairement, les valeurs d'origine du réglage « fermeture du capot » afin de
+        pouvoir les restaurer ; ce fichier est supprimé dès la restauration ;</li>
+    <li><code>log.txt</code> : un journal technique (1 Mo maximum, avec rotation) des actions de l'application
+        (activation, restauration, erreurs), utile en cas de demande d'assistance.</li>
+  </ul>
+  <p>Pour la fonction « jusqu'à la fin d'un processus », KeepLid lit la <em>liste des noms</em> des processus en cours,
+     uniquement en mémoire et uniquement pour savoir si le processus choisi tourne encore. Cette liste n'est ni
+     enregistrée ni transmise. KeepLid lit aussi l'état de la batterie et du capot, pour ses garde-fous.</p>
+  <p>Ces fichiers ne quittent jamais votre ordinateur. Vous pouvez les consulter à tout moment
+     (Réglages › « Ouvrir le journal ») ; ils sont supprimés lorsque vous désinstallez l'application.</p>
+
+  <h2>Réglages système modifiés</h2>
+  <p>Lorsque vous activez le mode capot, et seulement si Windows l'autorise sans droits administrateur, KeepLid modifie
+     temporairement l'action « Lorsque je ferme le capot » du mode d'alimentation actif. La valeur d'origine est
+     enregistrée avant la modification puis restaurée automatiquement. KeepLid ne modifie aucun autre réglage, ne
+     demande jamais de droits administrateur et n'écrit pas dans le registre.</p>
+
+  <h2>Licence et Microsoft Store</h2>
+  <p>La vérification de la licence (achat ou période d'essai) est effectuée par Windows et le Microsoft Store,
+     selon la <a href="https://privacy.microsoft.com/fr-fr/privacystatement">déclaration de confidentialité de Microsoft</a>.
+     KeepLid ne reçoit aucune information personnelle à cette occasion, seulement l'état de la licence.</p>
+
+  <h2>Liens</h2>
+  <p>Les liens « Politique de confidentialité » et « Aide » ouvrent cette page ou la page d'aide dans votre
+     navigateur ; l'application elle-même ne se connecte pas.</p>
+
+  <h2>Enfants</h2>
+  <p>KeepLid ne collecte aucune donnée, y compris auprès d'enfants.</p>
+
+  <h2>Contact</h2>
+  <p>Pour toute question : <a href="mailto:&lt;EMAIL_SUPPORT&gt;">&lt;EMAIL_SUPPORT&gt;</a> — &lt;NOM_EDITEUR&gt;.</p>
+
+  <h2>Modifications</h2>
+  <p>Toute modification de cette politique sera publiée sur cette page avec une nouvelle date de mise à jour.</p>
+</main>
+</body>
+</html>

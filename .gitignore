@@ -1,0 +1,12 @@
+!/artifacts/README.md
+*.pfx
+*.suo
+*.user
+.vs/
+/artifacts/*
+/out/
+AppPackages/
+BundleArtifacts/
+TestResults/
+bin/
+obj/

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UI strings (French). Keep keys identical in Strings.resx and Strings.fr.resx (checked by a unit test). -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppName" xml:space="preserve"><value>KeepLid</value></data>
+  <data name="Tagline" xml:space="preserve"><value>Ferme le capot, ton IA continue.</value></data>
+  <data name="Tray_Inactive" xml:space="preserve"><value>KeepLid — Inactif</value></data>
+  <data name="Tray_Awake" xml:space="preserve"><value>Éveillé</value></data>
+  <data name="Tray_LidOk" xml:space="preserve"><value>capot OK</value></data>
+  <data name="Tray_LidGuide" xml:space="preserve"><value>capot : réglage manuel</value></data>
+  <data name="Tray_DisplayOn" xml:space="preserve"><value>écran allumé</value></data>
+  <data name="Tray_Remaining" xml:space="preserve"><value>encore {0}</value></data>
+  <data name="Tray_UntilOff" xml:space="preserve"><value>jusqu'à désactivation</value></data>
+  <data name="Tray_WhileProcesses" xml:space="preserve"><value>tant que {0} tourne</value></data>
+  <data name="Tray_GuardTripped" xml:space="preserve"><value>Arrêté par sécurité — {0}</value></data>
+  <data name="Duration_HoursMinutes" xml:space="preserve"><value>{0} h {1:00}</value></data>
+  <data name="Duration_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Guard_LowBattery" xml:space="preserve"><value>batterie faible</value></data>
+  <data name="Guard_LidTooLong" xml:space="preserve"><value>capot fermé trop longtemps sur batterie</value></data>
+  <data name="Menu_KeepAwake" xml:space="preserve"><value>Garder éveillé</value></data>
+  <data name="Menu_30Min" xml:space="preserve"><value>30 minutes</value></data>
+  <data name="Menu_1H" xml:space="preserve"><value>1 heure</value></data>
+  <data name="Menu_2H" xml:space="preserve"><value>2 heures</value></data>
+  <data name="Menu_4H" xml:space="preserve"><value>4 heures</value></data>
+  <data name="Menu_Custom" xml:space="preserve"><value>Durée personnalisée…</value></data>
+  <data name="Menu_Indefinite" xml:space="preserve"><value>Jusqu'à désactivation</value></data>
+  <data name="Menu_UntilProcess" xml:space="preserve"><value>Jusqu'à la fin d'un processus…</value></data>
+  <data name="Menu_TurnOff" xml:space="preserve"><value>Désactiver</value></data>
+  <data name="Menu_KeepDisplayOn" xml:space="preserve"><value>Garder l'écran allumé</value></data>
+  <data name="Menu_LidMode" xml:space="preserve"><value>Continuer quand le capot est fermé</value></data>
+  <data name="Menu_LidModeNoLid" xml:space="preserve"><value>Continuer quand le capot est fermé (aucun capot détecté)</value></data>
+  <data name="Menu_LidGuide" xml:space="preserve"><value>Capot fermé : guide de réglage…</value></data>
+  <data name="Menu_Settings" xml:space="preserve"><value>Réglages…</value></data>
+  <data name="Menu_Quit" xml:space="preserve"><value>Quitter (restaure tout)</value></data>
+  <data name="Menu_Buy" xml:space="preserve"><value>Essai terminé — acheter KeepLid…</value></data>
+  <data name="Notify_TaskDone_Title" xml:space="preserve"><value>Tâche terminée</value></data>
+  <data name="Notify_TaskDone_Body" xml:space="preserve"><value>Le PC peut se remettre en veille.</value></data>
+  <data name="Notify_Guard_Title" xml:space="preserve"><value>KeepLid s'est arrêté par sécurité</value></data>
+  <data name="Notify_Guard_LowBattery" xml:space="preserve"><value>Batterie sous {0} % : les réglages de veille normaux sont rétablis.</value></data>
+  <data name="Notify_Guard_LidTooLong" xml:space="preserve"><value>Le capot est resté fermé sur batterie plus de {0} : les réglages de veille normaux sont rétablis.</value></data>
+  <data name="Notify_Suspended_Title" xml:space="preserve"><value>KeepLid s'est désactivé</value></data>
+  <data name="Notify_Suspended_Body" xml:space="preserve"><value>Le PC s'est mis en veille. Vos réglages ont été restaurés.</value></data>
+  <data name="Notify_LidError" xml:space="preserve"><value>Le réglage du capot n'a pas pu être modifié (erreur {0}). KeepLid garde le PC éveillé tant que le capot est ouvert.</value></data>
+  <data name="Notify_LidReminder_Title" xml:space="preserve"><value>Réglage du capot</value></data>
+  <data name="Notify_LidReminder_Body" xml:space="preserve"><value>La fermeture du capot est toujours réglée sur « Ne rien faire ». Remettez « Veille » si vous le souhaitez.</value></data>
+  <data name="Notify_Restored_Title" xml:space="preserve"><value>Réglages d'alimentation restaurés</value></data>
+  <data name="Notify_Restored_Body" xml:space="preserve"><value>KeepLid n'avait pas été fermé correctement : votre réglage du capot a été remis.</value></data>
+  <data name="Notify_RestoreFailed" xml:space="preserve"><value>Votre réglage du capot n'a pas pu être restauré. Ouvrez les réglages de KeepLid et cliquez sur « Restaurer ».</value></data>
+  <data name="Notify_HotkeyFailed" xml:space="preserve"><value>Le raccourci {0} est déjà utilisé par une autre application.</value></data>
+  <data name="Notify_Started" xml:space="preserve"><value>Éveillé {0}</value></data>
+  <data name="LidAction_0" xml:space="preserve"><value>Ne rien faire</value></data>
+  <data name="LidAction_1" xml:space="preserve"><value>Veille</value></data>
+  <data name="LidAction_2" xml:space="preserve"><value>Veille prolongée</value></data>
+  <data name="LidAction_3" xml:space="preserve"><value>Arrêter</value></data>
+  <data name="LidAction_Unknown" xml:space="preserve"><value>inconnu ({0})</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>KeepLid — Réglages</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>Général</value></data>
+  <data name="Settings_StartWithWindows" xml:space="preserve"><value>Lancer au démarrage de Windows</value></data>
+  <data name="Settings_StartupDisabledByUser" xml:space="preserve"><value>Désactivé dans Paramètres Windows › Applications › Démarrage : réactivez-le là-bas.</value></data>
+  <data name="Settings_StartupUnavailable" xml:space="preserve"><value>Disponible uniquement dans la version installée (Store).</value></data>
+  <data name="Settings_KeepDisplayOnDefault" xml:space="preserve"><value>Écran allumé par défaut</value></data>
+  <data name="Settings_LidModeDefault" xml:space="preserve"><value>Mode capot activé par défaut</value></data>
+  <data name="Settings_LidOnBattery" xml:space="preserve"><value>Mode capot aussi sur batterie</value></data>
+  <data name="Settings_Lid" xml:space="preserve"><value>Mode capot</value></data>
+  <data name="Settings_LidAllowed" xml:space="preserve"><value>Automatique : KeepLid modifie temporairement l'action du capot puis la restaure.</value></data>
+  <data name="Settings_LidDenied" xml:space="preserve"><value>Windows n'autorise pas les applications à modifier l'action du capot sur ce PC : utilisez le guide.</value></data>
+  <data name="Settings_LidNoLid" xml:space="preserve"><value>Aucun capot détecté sur ce PC.</value></data>
+  <data name="Settings_CurrentLid" xml:space="preserve"><value>Action actuelle du capot : secteur = {0}, batterie = {1}</value></data>
+  <data name="Settings_OpenGuide" xml:space="preserve"><value>Ouvrir le guide</value></data>
+  <data name="Settings_Guards" xml:space="preserve"><value>Garde-fous</value></data>
+  <data name="Settings_BatteryThreshold" xml:space="preserve"><value>Arrêter sous ce niveau de batterie (%)</value></data>
+  <data name="Settings_MaxLidMinutes" xml:space="preserve"><value>Durée maximale capot fermé sur batterie (minutes)</value></data>
+  <data name="Settings_NoThermal" xml:space="preserve"><value>KeepLid ne peut pas lire les températures (cela demande des droits administrateur). Ne laissez jamais un portable allumé dans un sac fermé.</value></data>
+  <data name="Settings_Processes" xml:space="preserve"><value>Processus préférés (un par ligne)</value></data>
+  <data name="Settings_HotkeyEnabled" xml:space="preserve"><value>Raccourci clavier global pour activer / désactiver</value></data>
+  <data name="Settings_HotkeyHint" xml:space="preserve"><value>Cliquez dans la case puis appuyez sur la combinaison (Ctrl, Alt ou Win obligatoire).</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>Restaurer les réglages d'alimentation d'origine maintenant</value></data>
+  <data name="Settings_RestoreDone" xml:space="preserve"><value>Réglages d'origine restaurés.</value></data>
+  <data name="Settings_RestoreNothing" xml:space="preserve"><value>Rien à restaurer : vos réglages d'alimentation sont ceux d'origine.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>La restauration a échoué (voir le journal).</value></data>
+  <data name="Settings_OpenLog" xml:space="preserve"><value>Ouvrir le journal</value></data>
+  <data name="Settings_Privacy" xml:space="preserve"><value>Politique de confidentialité</value></data>
+  <data name="Settings_Help" xml:space="preserve"><value>Aide</value></data>
+  <data name="Settings_ShowWelcome" xml:space="preserve"><value>Revoir l'écran d'accueil</value></data>
+  <data name="Settings_Save" xml:space="preserve"><value>Enregistrer</value></data>
+  <data name="Settings_Cancel" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Settings_Version" xml:space="preserve"><value>Version {0} — 100 % local, aucun réseau, aucun compte.</value></data>
+  <data name="Settings_InvalidNumber" xml:space="preserve"><value>Saisissez un nombre entier entre {0} et {1}.</value></data>
+  <data name="Settings_InvalidHotkey" xml:space="preserve"><value>Raccourci invalide.</value></data>
+  <data name="Battery_Title" xml:space="preserve"><value>Mode capot sur batterie</value></data>
+  <data name="Battery_Body" xml:space="preserve"><value>Sur batterie, un portable capot fermé continue de fonctionner et consomme sa batterie. KeepLid s'arrête de lui-même sous {0} % de batterie ou après {1} capot fermé. Ne mettez jamais un portable allumé dans un sac fermé.
+
+Appliquer aussi le mode capot sur batterie ?</value></data>
+  <data name="Welcome_Title" xml:space="preserve"><value>Bienvenue dans KeepLid</value></data>
+  <data name="Welcome_Step1_Title" xml:space="preserve"><value>Ce que fait KeepLid</value></data>
+  <data name="Welcome_Step1_Body" xml:space="preserve"><value>KeepLid empêche Windows de se mettre en veille pendant qu'une tâche longue tourne : un agent IA (Claude Code, Codex, Cursor…), une compilation, un téléchargement, un rendu.
+
+Cliquez sur l'icône près de l'horloge pour l'activer ou le désactiver. Il se coupe tout seul après la durée choisie, ou quand le processus choisi se termine. Il ne simule jamais de touche ni de mouvement de souris.</value></data>
+  <data name="Welcome_Step2_Title" xml:space="preserve"><value>Ce que modifie le mode capot</value></data>
+  <data name="Welcome_Step2_Body" xml:space="preserve"><value>Pour continuer capot fermé, KeepLid règle temporairement « Lorsque je ferme le capot » sur « Ne rien faire » — sur secteur uniquement, sauf si vous l'autorisez aussi sur batterie.
+
+Le réglage d'origine est sauvegardé d'abord puis restauré automatiquement : quand vous désactivez KeepLid, le quittez, fermez la session ou éteignez le PC, et même après un plantage, au lancement suivant.
+
+Si Windows n'autorise pas les applications à modifier ce réglage sur votre PC, KeepLid affiche un guide pas à pas à la place.</value></data>
+  <data name="Welcome_Step3_Title" xml:space="preserve"><value>Conseil de sécurité</value></data>
+  <data name="Welcome_Step3_Body" xml:space="preserve"><value>Capot fermé, l'écran intégré s'éteint (c'est matériel), mais le PC continue de travailler et de chauffer.
+
+Ne laissez jamais un portable allumé dans un sac fermé ou sur une surface molle (lit, canapé). KeepLid se désactive de lui-même quand la batterie devient faible.</value></data>
+  <data name="Welcome_StepOf" xml:space="preserve"><value>Étape {0} sur {1}</value></data>
+  <data name="Welcome_Back" xml:space="preserve"><value>Précédent</value></data>
+  <data name="Welcome_Next" xml:space="preserve"><value>Suivant</value></data>
+  <data name="Welcome_Finish" xml:space="preserve"><value>Commencer</value></data>
+  <data name="Guide_Title" xml:space="preserve"><value>Capot fermé : guide de réglage</value></data>
+  <data name="Guide_Intro" xml:space="preserve"><value>Sur ce PC, Windows réserve la modification du mode d'alimentation aux administrateurs, et KeepLid ne demande jamais de droits administrateur. Vous pouvez changer le réglage du capot vous-même en 30 secondes :</value></data>
+  <data name="Guide_Step1" xml:space="preserve"><value>1. Cliquez sur « Ouvrir les réglages du capot » ci-dessous.</value></data>
+  <data name="Guide_Step2" xml:space="preserve"><value>2. En face de « Lorsque je ferme le capot », colonne « Sur secteur », choisissez « Ne rien faire », puis cliquez sur « Enregistrer les modifications ».</value></data>
+  <data name="Guide_Step3" xml:space="preserve"><value>3. Quand votre tâche est terminée, remettez « Veille ». KeepLid vous le rappelle quand il se désactive.</value></data>
+  <data name="Guide_Current" xml:space="preserve"><value>Réglage actuel : secteur = {0}, batterie = {1}</value></data>
+  <data name="Guide_Open" xml:space="preserve"><value>Ouvrir les réglages du capot</value></data>
+  <data name="Guide_Close" xml:space="preserve"><value>Fermer</value></data>
+  <data name="Process_Title" xml:space="preserve"><value>Garder éveillé jusqu'à la fin d'un processus</value></data>
+  <data name="Process_Hint" xml:space="preserve"><value>KeepLid reste actif tant qu'au moins un processus coché tourne, puis se désactive.</value></data>
+  <data name="Process_Search" xml:space="preserve"><value>Rechercher par nom</value></data>
+  <data name="Process_NotRunning" xml:space="preserve"><value>non lancé</value></data>
+  <data name="Process_Running" xml:space="preserve"><value>en cours</value></data>
+  <data name="Process_Start" xml:space="preserve"><value>Démarrer</value></data>
+  <data name="Process_Cancel" xml:space="preserve"><value>Annuler</value></data>
+  <data name="Custom_Title" xml:space="preserve"><value>Durée personnalisée</value></data>
+  <data name="Custom_Label" xml:space="preserve"><value>Garder éveillé pendant (minutes) :</value></data>
+  <data name="Custom_Start" xml:space="preserve"><value>Démarrer</value></data>
+  <data name="Trial_Expired_Title" xml:space="preserve"><value>Essai terminé</value></data>
+  <data name="Trial_Expired_Body" xml:space="preserve"><value>Votre essai gratuit est terminé. Achetez KeepLid dans le Microsoft Store pour continuer à l'utiliser.</value></data>
+  <data name="Trial_DaysLeft" xml:space="preserve"><value>Essai gratuit : encore {0} jour(s)</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>Oui</value></data>
+  <data name="Common_No" xml:space="preserve"><value>Non</value></data>
+  <data name="Common_OK" xml:space="preserve"><value>OK</value></data>
+</root>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UI strings (English, neutral). Keep keys identical in Strings.resx and Strings.fr.resx (checked by a unit test). -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppName" xml:space="preserve"><value>KeepLid</value></data>
+  <data name="Tagline" xml:space="preserve"><value>Close the lid, your AI keeps working.</value></data>
+  <data name="Tray_Inactive" xml:space="preserve"><value>KeepLid — Off</value></data>
+  <data name="Tray_Awake" xml:space="preserve"><value>Awake</value></data>
+  <data name="Tray_LidOk" xml:space="preserve"><value>lid OK</value></data>
+  <data name="Tray_LidGuide" xml:space="preserve"><value>lid: manual setting</value></data>
+  <data name="Tray_DisplayOn" xml:space="preserve"><value>screen on</value></data>
+  <data name="Tray_Remaining" xml:space="preserve"><value>{0} left</value></data>
+  <data name="Tray_UntilOff" xml:space="preserve"><value>until turned off</value></data>
+  <data name="Tray_WhileProcesses" xml:space="preserve"><value>while {0} runs</value></data>
+  <data name="Tray_GuardTripped" xml:space="preserve"><value>Stopped for safety — {0}</value></data>
+  <data name="Duration_HoursMinutes" xml:space="preserve"><value>{0} h {1:00}</value></data>
+  <data name="Duration_Minutes" xml:space="preserve"><value>{0} min</value></data>
+  <data name="Guard_LowBattery" xml:space="preserve"><value>battery low</value></data>
+  <data name="Guard_LidTooLong" xml:space="preserve"><value>lid closed too long on battery</value></data>
+  <data name="Menu_KeepAwake" xml:space="preserve"><value>Keep awake</value></data>
+  <data name="Menu_30Min" xml:space="preserve"><value>30 minutes</value></data>
+  <data name="Menu_1H" xml:space="preserve"><value>1 hour</value></data>
+  <data name="Menu_2H" xml:space="preserve"><value>2 hours</value></data>
+  <data name="Menu_4H" xml:space="preserve"><value>4 hours</value></data>
+  <data name="Menu_Custom" xml:space="preserve"><value>Custom duration…</value></data>
+  <data name="Menu_Indefinite" xml:space="preserve"><value>Until turned off</value></data>
+  <data name="Menu_UntilProcess" xml:space="preserve"><value>Until a process ends…</value></data>
+  <data name="Menu_TurnOff" xml:space="preserve"><value>Turn off</value></data>
+  <data name="Menu_KeepDisplayOn" xml:space="preserve"><value>Keep the screen on</value></data>
+  <data name="Menu_LidMode" xml:space="preserve"><value>Keep working when the lid is closed</value></data>
+  <data name="Menu_LidModeNoLid" xml:space="preserve"><value>Keep working when the lid is closed (no lid detected)</value></data>
+  <data name="Menu_LidGuide" xml:space="preserve"><value>Lid closed: setup guide…</value></data>
+  <data name="Menu_Settings" xml:space="preserve"><value>Settings…</value></data>
+  <data name="Menu_Quit" xml:space="preserve"><value>Quit (restores everything)</value></data>
+  <data name="Menu_Buy" xml:space="preserve"><value>Trial ended — buy KeepLid…</value></data>
+  <data name="Notify_TaskDone_Title" xml:space="preserve"><value>Task finished</value></data>
+  <data name="Notify_TaskDone_Body" xml:space="preserve"><value>The PC can go back to sleep.</value></data>
+  <data name="Notify_Guard_Title" xml:space="preserve"><value>KeepLid stopped for safety</value></data>
+  <data name="Notify_Guard_LowBattery" xml:space="preserve"><value>Battery below {0}%: normal sleep settings are back.</value></data>
+  <data name="Notify_Guard_LidTooLong" xml:space="preserve"><value>The lid stayed closed on battery for more than {0}: normal sleep settings are back.</value></data>
+  <data name="Notify_Suspended_Title" xml:space="preserve"><value>KeepLid turned off</value></data>
+  <data name="Notify_Suspended_Body" xml:space="preserve"><value>The PC went to sleep. Your settings have been restored.</value></data>
+  <data name="Notify_LidError" xml:space="preserve"><value>The lid setting could not be changed (error {0}). KeepLid keeps the PC awake while the lid is open.</value></data>
+  <data name="Notify_LidReminder_Title" xml:space="preserve"><value>Lid setting</value></data>
+  <data name="Notify_LidReminder_Body" xml:space="preserve"><value>Closing the lid is still set to “Do nothing”. Set it back to “Sleep” if you wish.</value></data>
+  <data name="Notify_Restored_Title" xml:space="preserve"><value>Power settings restored</value></data>
+  <data name="Notify_Restored_Body" xml:space="preserve"><value>KeepLid had not been closed properly: your lid setting has been put back.</value></data>
+  <data name="Notify_RestoreFailed" xml:space="preserve"><value>Your lid setting could not be restored. Open KeepLid settings and click “Restore”.</value></data>
+  <data name="Notify_HotkeyFailed" xml:space="preserve"><value>The shortcut {0} is already used by another app.</value></data>
+  <data name="Notify_Started" xml:space="preserve"><value>Awake {0}</value></data>
+  <data name="LidAction_0" xml:space="preserve"><value>Do nothing</value></data>
+  <data name="LidAction_1" xml:space="preserve"><value>Sleep</value></data>
+  <data name="LidAction_2" xml:space="preserve"><value>Hibernate</value></data>
+  <data name="LidAction_3" xml:space="preserve"><value>Shut down</value></data>
+  <data name="LidAction_Unknown" xml:space="preserve"><value>unknown ({0})</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>KeepLid — Settings</value></data>
+  <data name="Settings_General" xml:space="preserve"><value>General</value></data>
+  <data name="Settings_StartWithWindows" xml:space="preserve"><value>Start with Windows</value></data>
+  <data name="Settings_StartupDisabledByUser" xml:space="preserve"><value>Disabled in Windows Settings › Apps › Startup: turn it back on there.</value></data>
+  <data name="Settings_StartupUnavailable" xml:space="preserve"><value>Only available in the installed (Store) version.</value></data>
+  <data name="Settings_KeepDisplayOnDefault" xml:space="preserve"><value>Keep the screen on by default</value></data>
+  <data name="Settings_LidModeDefault" xml:space="preserve"><value>Lid mode on by default</value></data>
+  <data name="Settings_LidOnBattery" xml:space="preserve"><value>Lid mode also on battery</value></data>
+  <data name="Settings_Lid" xml:space="preserve"><value>Lid mode</value></data>
+  <data name="Settings_LidAllowed" xml:space="preserve"><value>Automatic: KeepLid changes the lid action temporarily and restores it.</value></data>
+  <data name="Settings_LidDenied" xml:space="preserve"><value>Windows does not let apps change the lid action on this PC: use the guide.</value></data>
+  <data name="Settings_LidNoLid" xml:space="preserve"><value>No lid detected on this PC.</value></data>
+  <data name="Settings_CurrentLid" xml:space="preserve"><value>Current lid action: plugged in = {0}, on battery = {1}</value></data>
+  <data name="Settings_OpenGuide" xml:space="preserve"><value>Open the guide</value></data>
+  <data name="Settings_Guards" xml:space="preserve"><value>Safety limits</value></data>
+  <data name="Settings_BatteryThreshold" xml:space="preserve"><value>Stop below this battery level (%)</value></data>
+  <data name="Settings_MaxLidMinutes" xml:space="preserve"><value>Maximum time with the lid closed on battery (minutes)</value></data>
+  <data name="Settings_NoThermal" xml:space="preserve"><value>KeepLid cannot read temperatures (that requires administrator rights). Never leave a running laptop in a closed bag.</value></data>
+  <data name="Settings_Processes" xml:space="preserve"><value>Favorite processes (one per line)</value></data>
+  <data name="Settings_HotkeyEnabled" xml:space="preserve"><value>Global shortcut to turn on / off</value></data>
+  <data name="Settings_HotkeyHint" xml:space="preserve"><value>Click the box, then press the key combination (Ctrl, Alt or Win required).</value></data>
+  <data name="Settings_Restore" xml:space="preserve"><value>Restore original power settings now</value></data>
+  <data name="Settings_RestoreDone" xml:space="preserve"><value>Original settings restored.</value></data>
+  <data name="Settings_RestoreNothing" xml:space="preserve"><value>Nothing to restore: your power settings are the originals.</value></data>
+  <data name="Settings_RestoreFailed" xml:space="preserve"><value>Restore failed (see the log).</value></data>
+  <data name="Settings_OpenLog" xml:space="preserve"><value>Open the log</value></data>
+  <data name="Settings_Privacy" xml:space="preserve"><value>Privacy policy</value></data>
+  <data name="Settings_Help" xml:space="preserve"><value>Help</value></data>
+  <data name="Settings_ShowWelcome" xml:space="preserve"><value>Show the welcome screen</value></data>
+  <data name="Settings_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Settings_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Settings_Version" xml:space="preserve"><value>Version {0} — 100% local, no network, no account.</value></data>
+  <data name="Settings_InvalidNumber" xml:space="preserve"><value>Enter a whole number between {0} and {1}.</value></data>
+  <data name="Settings_InvalidHotkey" xml:space="preserve"><value>Invalid shortcut.</value></data>
+  <data name="Battery_Title" xml:space="preserve"><value>Lid mode on battery</value></data>
+  <data name="Battery_Body" xml:space="preserve"><value>On battery, a laptop with its lid closed keeps running and uses its battery. KeepLid stops by itself below {0}% battery or after {1} with the lid closed. Never put a running laptop in a closed bag.
+
+Also apply the lid mode on battery?</value></data>
+  <data name="Welcome_Title" xml:space="preserve"><value>Welcome to KeepLid</value></data>
+  <data name="Welcome_Step1_Title" xml:space="preserve"><value>What KeepLid does</value></data>
+  <data name="Welcome_Step1_Body" xml:space="preserve"><value>KeepLid stops Windows from going to sleep while a long task runs: an AI agent (Claude Code, Codex, Cursor…), a build, a download, a render.
+
+Click the icon next to the clock to turn it on or off. It turns off by itself after the chosen time, or when the process you picked ends. It never simulates keystrokes or mouse moves.</value></data>
+  <data name="Welcome_Step2_Title" xml:space="preserve"><value>What the lid mode changes</value></data>
+  <data name="Welcome_Step2_Body" xml:space="preserve"><value>To keep working with the lid closed, KeepLid temporarily sets “When I close the lid” to “Do nothing” — plugged in only, unless you also allow it on battery.
+
+The original setting is saved first and restored automatically: when you turn KeepLid off, quit, sign out or shut down, and even after a crash, at the next launch.
+
+If Windows does not allow apps to change this setting on your PC, KeepLid shows a step-by-step guide instead.</value></data>
+  <data name="Welcome_Step3_Title" xml:space="preserve"><value>Safety tip</value></data>
+  <data name="Welcome_Step3_Body" xml:space="preserve"><value>With the lid closed, the built-in screen turns off (that is hardware), but the PC keeps working and producing heat.
+
+Never leave a running laptop in a closed bag or on a soft surface (bed, sofa). KeepLid turns off by itself when the battery gets low.</value></data>
+  <data name="Welcome_StepOf" xml:space="preserve"><value>Step {0} of {1}</value></data>
+  <data name="Welcome_Back" xml:space="preserve"><value>Back</value></data>
+  <data name="Welcome_Next" xml:space="preserve"><value>Next</value></data>
+  <data name="Welcome_Finish" xml:space="preserve"><value>Get started</value></data>
+  <data name="Guide_Title" xml:space="preserve"><value>Lid closed: setup guide</value></data>
+  <data name="Guide_Intro" xml:space="preserve"><value>On this PC, Windows only lets administrators change the power plan, and KeepLid never asks for administrator rights. You can change the lid setting yourself in 30 seconds:</value></data>
+  <data name="Guide_Step1" xml:space="preserve"><value>1. Click “Open lid settings” below.</value></data>
+  <data name="Guide_Step2" xml:space="preserve"><value>2. Next to “When I close the lid”, in the “Plugged in” column, choose “Do nothing”, then click “Save changes”.</value></data>
+  <data name="Guide_Step3" xml:space="preserve"><value>3. When your task is finished, set it back to “Sleep”. KeepLid reminds you when it turns off.</value></data>
+  <data name="Guide_Current" xml:space="preserve"><value>Current setting: plugged in = {0}, on battery = {1}</value></data>
+  <data name="Guide_Open" xml:space="preserve"><value>Open lid settings</value></data>
+  <data name="Guide_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Process_Title" xml:space="preserve"><value>Keep awake until a process ends</value></data>
+  <data name="Process_Hint" xml:space="preserve"><value>KeepLid stays on while at least one checked process is running, then turns off.</value></data>
+  <data name="Process_Search" xml:space="preserve"><value>Search by name</value></data>
+  <data name="Process_NotRunning" xml:space="preserve"><value>not running</value></data>
+  <data name="Process_Running" xml:space="preserve"><value>running</value></data>
+  <data name="Process_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Process_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Custom_Title" xml:space="preserve"><value>Custom duration</value></data>
+  <data name="Custom_Label" xml:space="preserve"><value>Keep awake for (minutes):</value></data>
+  <data name="Custom_Start" xml:space="preserve"><value>Start</value></data>
+  <data name="Trial_Expired_Title" xml:space="preserve"><value>Trial ended</value></data>
+  <data name="Trial_Expired_Body" xml:space="preserve"><value>Your free trial has ended. Buy KeepLid in the Microsoft Store to keep using it.</value></data>
+  <data name="Trial_DaysLeft" xml:space="preserve"><value>Free trial: {0} day(s) left</value></data>
+  <data name="Common_Yes" xml:space="preserve"><value>Yes</value></data>
+  <data name="Common_No" xml:space="preserve"><value>No</value></data>
+  <data name="Common_OK" xml:space="preserve"><value>OK</value></data>
+</root>
