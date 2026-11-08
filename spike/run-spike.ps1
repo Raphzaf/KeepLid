@@ -35,11 +35,11 @@ icacls $WorkDir /grant '*S-1-5-32-545:(OI)(CI)M' /T | Out-Null   # BUILTIN\Users
 # --- Diagnostics: edition and power scheme security descriptors (who may write / activate) -------
 (Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, ProductType | Format-List | Out-String) |
     Set-Content "$WorkDir\out\00-os.txt"
-& { 'SCHEME_CURRENT:'; powercfg /getsecuritydescriptor SCHEME_CURRENT
-    'ACTION_SETACTIVE:'; powercfg /getsecuritydescriptor ACTION_SETACTIVE
-    'ACTION_CREATE:'; powercfg /getsecuritydescriptor ACTION_CREATE
-    'ACTION_DEFAULT:'; powercfg /getsecuritydescriptor ACTION_DEFAULT } *>&1 |
-    Set-Content "$WorkDir\out\00-security-descriptors.txt"
+# (cmd /c ... 2>&1: Windows PowerShell 5.1 turns native stderr into terminating errors under 'Stop')
+$sd = foreach ($t in 'SCHEME_CURRENT', 'ACTION_SETACTIVE', 'ACTION_CREATE', 'ACTION_DEFAULT') {
+    "$($t):"; cmd /c "powercfg /getsecuritydescriptor $t 2>&1"
+}
+$sd | Set-Content "$WorkDir\out\00-security-descriptors.txt"
 
 # --- 1. bare exe, current user ----------------------------------------------------------------------
 & "$WorkDir\bin\KeepLid.Spike.exe" --out "$WorkDir\out\bare-admin.json" | Out-Null
