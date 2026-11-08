@@ -69,9 +69,11 @@ $appVersion = ($Version -split '\.')[0..2] -join '.'
 $msixFiles = @()
 foreach ($arch in $Architectures) {
     $layout = Join-Path $work "layout-$arch"
+    # Same layout as the Visual Studio packaging project: the app lives in "KeepLid.App\".
+    $appDir = Join-Path $layout 'KeepLid.App'
     Invoke-Tool 'dotnet' @('publish', (Join-Path $root 'src\KeepLid.App\KeepLid.App.csproj'), '-c', 'Release',
-        '-r', "win-$arch", '--self-contained', 'true', "-p:Version=$appVersion", '-o', $layout)
-    Get-ChildItem $layout -Filter *.pdb -Recurse | Remove-Item
+        '-r', "win-$arch", '--self-contained', 'true', "-p:Version=$appVersion", '-o', $appDir)
+    Get-ChildItem $appDir -Filter *.pdb -Recurse | Remove-Item
 
     Copy-Item (Join-Path $packageProject 'Images') (Join-Path $layout 'Images') -Recurse
 
@@ -82,7 +84,7 @@ foreach ($arch in $Architectures) {
     $manifest.Package.Identity.Version = $Version
     $manifest.Package.Identity.SetAttribute('ProcessorArchitecture', $arch)
     $manifest.GetElementsByTagName('PublisherDisplayName')[0].InnerText = $PublisherDisplayName
-    $text = $manifest.OuterXml.Replace('$targetnametoken$', 'KeepLid').Replace('$targetentrypoint$', 'Windows.FullTrustApplication')
+    $text = $manifest.OuterXml.Replace('$targetnametoken$', 'KeepLid.App\KeepLid').Replace('$targetentrypoint$', 'Windows.FullTrustApplication')
     $manifestPath = Join-Path $layout 'AppxManifest.xml'
     [System.IO.File]::WriteAllText($manifestPath, $text, (New-Object System.Text.UTF8Encoding($false)))
 

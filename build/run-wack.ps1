@@ -9,6 +9,8 @@ param(
     [string]$ReportPath = (Join-Path (Split-Path $MsixPath) 'wack-report.xml')
 )
 $ErrorActionPreference = 'Stop'
+$ReportPath = [System.IO.Path]::GetFullPath($ReportPath)   # appcert.exe requires an absolute path
+if (Test-Path $ReportPath) { Remove-Item $ReportPath }
 $appcert = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe' -ErrorAction SilentlyContinue
 if (-not $appcert) {
     Write-Warning 'Windows App Certification Kit not installed (Windows SDK component). Skipping.'

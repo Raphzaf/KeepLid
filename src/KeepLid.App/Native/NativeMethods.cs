@@ -113,6 +113,18 @@ internal static class NativeMethods
     public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
     // ---------------------------------------------------------------------------------------------
+    // Memory — um/memoryapi.h: BOOL SetProcessWorkingSetSize(HANDLE, SIZE_T min, SIZE_T max);
+    // (SIZE_T)-1 for both values trims the working set as much as possible (pages come back on demand).
+    // ---------------------------------------------------------------------------------------------
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool SetProcessWorkingSetSize(IntPtr hProcess, IntPtr minimumWorkingSetSize, IntPtr maximumWorkingSetSize);
+
+    /// <summary>processthreadsapi.h: HANDLE GetCurrentProcess(void); (pseudo-handle, no need to close).</summary>
+    [DllImport("kernel32.dll")]
+    public static extern IntPtr GetCurrentProcess();
+
+    // ---------------------------------------------------------------------------------------------
     // Misc
     // ---------------------------------------------------------------------------------------------
 

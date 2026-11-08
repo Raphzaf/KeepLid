@@ -62,6 +62,12 @@ internal sealed class LicenseService(ILog log)
         if (!PackageInfo.IsPackaged) return; // developer build: always licensed
         try
         {
+            // Sideloaded / developer-signed packages have no Store license (it would read as an expired trial).
+            if (Package.Current.SignatureKind != PackageSignatureKind.Store)
+            {
+                log.Info($"License check skipped (package signature: {Package.Current.SignatureKind})");
+                return;
+            }
             _context ??= StoreContext.GetDefault();
             StoreAppLicense license = await _context.GetAppLicenseAsync();
             IsActive = license.IsActive;

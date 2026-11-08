@@ -1,0 +1,131 @@
+# Compilation et packaging
+
+Deux chemins équivalents, à partir des **mêmes** fichiers (`src/KeepLid.Package/Package.appxmanifest` + `Images/`) :
+
+* **A — ligne de commande** (`build/package.ps1`) : reproductible, utilisé par la CI, pas besoin de Visual Studio ;
+* **B — Visual Studio 2022** (`KeepLid.Store.sln` + projet `KeepLid.Package.wapproj`) : assistant « Associer au Store ».
+
+## 1. Prérequis (Windows 10/11 x64)
+
+| Outil | Version | Installation |
+|---|---|---|
+| .NET SDK | 8.0.x | `winget install Microsoft.DotNet.SDK.8` |
+| Windows SDK (makeappx, makepri, signtool, App Certification Kit) | 10.0.19041 ou plus récent (testé 10.0.26100) | `winget install Microsoft.WindowsSDK.10.0.26100` |
+| PowerShell | 5.1 (intégré) ou 7 | — |
+| *(chemin B)* Visual Studio 2022 | 17.8+ | charge de travail « Développement .NET Desktop » + composant « Outils d'empaquetage MSIX » |
+
+Compiler et tester seulement :
+
+```powershell
+dotnet build KeepLid.sln -c Release
+dotnet test tests/KeepLid.Core.Tests -c Release
+dotnet run --project src/KeepLid.App        # lance l'app non empaquetée (sans StartupTask ni licence Store)
+```
+
+> Sous Linux/macOS, `KeepLid.Core` et ses tests se compilent et passent ; l'app WPF se compile aussi
+> (`EnableWindowsTargeting`) avec le SDK .NET **de Microsoft** (pas la version « source-build » des distributions).
+
+## 2. Produire le `.msixupload` pour le Store (Release, x64 + ARM64)
+
+### Chemin A — ligne de commande
+
+Récupérer d'abord dans Partner Center › *Gestion des produits* › **Identité du produit** les trois valeurs
+`Package/Identity/Name`, `Package/Identity/Publisher`, `Package/Properties/PublisherDisplayName`, puis :
+
+```powershell
+.\build\package.ps1 -Version 1.0.0.0 `
+  -IdentityName "12345Editeur.KeepLid" `
+  -Publisher "CN=00000000-0000-0000-0000-000000000000" `
+  -PublisherDisplayName "Nom de l'éditeur"
+```
+
+Le script : lance les tests ; publie l'app **autonome** (`--self-contained`, aucun runtime .NET requis chez
+l'utilisateur) pour `win-x64` et `win-arm64` ; génère `resources.pri` (`makepri`, langues en-US + fr-FR) ;
+crée un `.msix` par architecture (`makeappx pack`) ; les regroupe dans un `.msixbundle` (`makeappx bundle`) ;
+emballe le bundle dans le **`.msixupload`**.
+
+Résultat dans `artifacts/` :
+
+```
+KeepLid_1.0.0.0_x64.msix
+KeepLid_1.0.0.0_arm64.msix
+KeepLid_1.0.0.0_x64_arm64.msixbundle
+KeepLid_1.0.0.0_x64_arm64.msixupload   ← à déposer dans Partner Center › Packages
+```
+
+Le paquet Store **n'a pas à être signé** : le Store le signe lui-même. Ne pas téléverser un paquet signé avec un
+certificat de test.
+
+### Chemin B — Visual Studio
+1. Ouvrir `KeepLid.Store.sln`, configuration **Release**, plateforme **x64**.
+2. Clic droit sur **KeepLid.Package** › *Publier* › **Associer l'application au Store…** › se connecter › choisir
+   *KeepLid* (réécrit l'identité dans `Package.appxmanifest`).
+3. Clic droit › *Publier* › **Créer des packages d'application…** › *Microsoft Store sous un nom d'application
+   existant* › cocher **x64** et **ARM64** (Release), « Générer le bundle : Toujours » › *Créer*.
+4. Le `.msixupload` est dans `artifacts/AppPackages/`. L'assistant propose de lancer le WACK (cocher).
+
+Équivalent en ligne de commande (Developer PowerShell for VS) :
+
+```powershell
+msbuild src\KeepLid.Package\KeepLid.Package.wapproj /restore /p:Configuration=Release /p:Platform=x64 `
+  /p:AppxBundle=Always "/p:AppxBundlePlatforms=x64|arm64" /p:UapAppxPackageBuildMode=StoreUpload
+```
+
+## 3. Tester le paquet en local (certificat de test)
+
+Le `Publisher` du manifeste doit être **identique** au sujet du certificat. Valeur par défaut des tests : `CN=KeepLid Test`.
+
+1. Créer le certificat (une fois, PowerShell **non** élevé) :
+   ```powershell
+   $cert = New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=KeepLid Test" `
+     -CertStoreLocation Cert:\CurrentUser\My -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
+   $pwd = Read-Host -AsSecureString "Mot de passe du .pfx"
+   Export-PfxCertificate -Cert $cert -FilePath .\KeepLidTest.pfx -Password $pwd
+   Export-Certificate -Cert $cert -FilePath .\KeepLidTest.cer
+   ```
+2. Construire et signer (identité de test par défaut) :
+   ```powershell
+   .\build\package.ps1 -CertificatePath .\KeepLidTest.pfx -CertificatePassword $pwd
+   ```
+3. Faire confiance au certificat (PowerShell **administrateur**, une fois) :
+   ```powershell
+   Import-Certificate -FilePath .\KeepLidTest.cer -CertStoreLocation Cert:\LocalMachine\TrustedPeople
+   ```
+4. Installer : double-clic sur `artifacts\KeepLid_1.0.0.0_x64.msix` (ou le `.msixbundle`), ou
+   `Add-AppxPackage .\artifacts\KeepLid_1.0.0.0_x64.msix`. Lancer depuis le menu Démarrer ou `keeplid` (Win+R).
+5. Désinstaller : `Get-AppxPackage KeepLid* | Remove-AppxPackage`.
+
+Les `.pfx` sont exclus du dépôt (`.gitignore`). Le paquet de la CI (artefact `keeplid-packages`) est signé avec un
+certificat jetable ; `KeepLidTest.cer` est fourni dans l'artefact pour l'installer.
+
+## 4. Windows App Certification Kit (WACK)
+
+PowerShell **administrateur**, sur le `.msix` x64 signé et approuvé (§3) :
+
+```powershell
+.\build\run-wack.ps1 -MsixPath .\artifacts\KeepLid_1.0.0.0_x64.msix
+```
+
+Ou interface graphique : menu Démarrer › *Windows App Cert Kit* › *Valider l'application du Store*.
+Le rapport XML (`wack-report.xml`) liste chaque test ; la CI l'exécute et publie le rapport (artefact `wack-report`).
+
+## 5. Test d'installation automatisé (CI)
+
+`build/smoke-test.ps1` (administrateur, machine jetable) : installe le `.msix`, simule un crash (action du capot à
+« Ne rien faire » + `restore.json` laissé dans le dossier de l'app), lance KeepLid, vérifie la **restauration**,
+mesure le CPU et la mémoire au repos, affiche le journal.
+
+## 6. Régénérer les icônes
+
+```bash
+pip install cairosvg pillow
+python store/03_visuels/generate_icons.py
+```
+
+Source unique : `store/03_visuels/keeplid.svg`. Sorties : `src/KeepLid.Package/Images/`,
+`src/KeepLid.App/Assets/` (icône de l'app et 4 icônes de la zone de notification), `store/03_visuels/icones/`.
+
+## 7. Versionner une mise à jour
+1. Choisir la version `X.Y.Z.0` (le 4ᵉ nombre reste `0`), mettre à jour `CHANGELOG.md` et `store/08_release/`.
+2. `.\build\package.ps1 -Version X.Y.Z.0 -IdentityName … -Publisher … -PublisherDisplayName …`
+3. Nouvelle soumission Partner Center : remplacer le paquet, mettre à jour « Nouveautés ».

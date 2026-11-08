@@ -110,6 +110,7 @@ public partial class App : Application
         _ = _license.RefreshAsync();
 
         if (!_settings.FirstRunCompleted) ShowWelcome();
+        ScheduleMemoryTrim();
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -264,6 +265,7 @@ public partial class App : Application
 
     private void OnStateChanged(object? sender, StateChangedEventArgs e)
     {
+        ScheduleMemoryTrim();
         if (_controller.State == AwakeState.Active) _timer.Start();
         else _timer.Stop();
 
@@ -398,6 +400,24 @@ public partial class App : Application
         _tray.Update(state, StatusText.Tooltip(_controller));
     }
 
+    /// <summary>
+    /// A tray app idles for hours: once startup or a window is done, give unused pages back to Windows
+    /// (they are reloaded on demand). Keeps the footprint shown in Task Manager well under 50 MB.
+    /// </summary>
+    private void ScheduleMemoryTrim()
+    {
+        var timer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Dispatcher) { Interval = TimeSpan.FromSeconds(3) };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            if (Windows.Count > 0) return; // a window is open: trim when it closes
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            Native.NativeMethods.SetProcessWorkingSetSize(Native.NativeMethods.GetCurrentProcess(), new IntPtr(-1), new IntPtr(-1));
+        };
+        timer.Start();
+    }
+
     private void EnsureWatchdog()
     {
         if (!_lid.IsApplied) return;
@@ -422,6 +442,7 @@ public partial class App : Application
             return;
         }
         T window = create();
+        window.Closed += (_, _) => ScheduleMemoryTrim();
         window.Show();
         window.Activate();
     }

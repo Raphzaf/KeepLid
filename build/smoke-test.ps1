@@ -63,9 +63,11 @@ $proc.Refresh(); $cpu0 = $proc.TotalProcessorTime; $t0 = Get-Date
 Start-Sleep -Seconds 30
 $proc.Refresh(); $cpuPercent = 100 * ($proc.TotalProcessorTime - $cpu0).TotalMilliseconds / ((Get-Date) - $t0).TotalMilliseconds / [Environment]::ProcessorCount
 $ws = [math]::Round($proc.WorkingSet64 / 1MB, 1); $priv = [math]::Round($proc.PrivateMemorySize64 / 1MB, 1)
-Write-Host ("Idle CPU over 30 s: {0:N3} %  |  working set: {1} MB  |  private bytes: {2} MB" -f $cpuPercent, $ws, $priv)
+# "Memory" column of Task Manager = private working set.
+$privateWs = try { [math]::Round((Get-Counter "\Process(KeepLid)\Working Set - Private").CounterSamples[0].CookedValue / 1MB, 1) } catch { $null }
+Write-Host ("Idle CPU over 30 s: {0:N3} %  |  private working set (Task Manager): {1} MB  |  working set: {2} MB  |  private bytes: {3} MB" -f $cpuPercent, $privateWs, $ws, $priv)
 if ($cpuPercent -gt 1) { $failures += "idle CPU too high ($cpuPercent %)" }
-if ($ws -gt 50) { Write-Warning "Working set above the 50 MB target ($ws MB)" }
+if ($privateWs -and $privateWs -gt 50) { $failures += "private working set above 50 MB ($privateWs MB)" }
 
 # --- Log ---------------------------------------------------------------------------------------------
 $log = Join-Path $dataDir 'log.txt'
