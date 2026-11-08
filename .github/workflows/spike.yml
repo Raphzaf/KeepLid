@@ -28,7 +28,7 @@ jobs:
           powercfg /getactivescheme
           powercfg /q SCHEME_CURRENT SUB_BUTTONS LIDACTION
       - name: Run spike (4 configurations)
-        shell: pwsh
+        shell: powershell   # Windows PowerShell 5.1: the Appx module does not load in pwsh 7 on Server 2022
         run: ./spike/run-spike.ps1 -PublishDir "$PWD/out/spike"
       - uses: actions/upload-artifact@v4
         if: always()

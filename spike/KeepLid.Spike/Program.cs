@@ -60,6 +60,15 @@ internal static class Native
     [DllImport("powrprof.dll")]
     public static extern uint PowerWriteDCValueIndex(IntPtr rootPowerKey, ref Guid scheme, ref Guid subGroup, ref Guid setting, uint value);
 
+    // powrprof.h: DWORD PowerDuplicateScheme(HKEY RootPowerKey, const GUID* SourceSchemeGuid, GUID** DestinationSchemeGuid);
+    // *DestinationSchemeGuid == NULL => the API allocates the GUID (free with LocalFree).
+    [DllImport("powrprof.dll")]
+    public static extern uint PowerDuplicateScheme(IntPtr rootPowerKey, ref Guid sourceScheme, ref IntPtr destinationScheme);
+
+    // powrprof.h: DWORD PowerDeleteScheme(HKEY RootPowerKey, CONST GUID* SchemeGuid);
+    [DllImport("powrprof.dll")]
+    public static extern uint PowerDeleteScheme(IntPtr rootPowerKey, ref Guid scheme);
+
     // powrprof.h: BOOLEAN GetPwrCapabilities(PSYSTEM_POWER_CAPABILITIES lpspc);
     // We pass a generously sized buffer and read LidPresent at offset 2 (see winnt.h struct layout).
     [DllImport("powrprof.dll")]
@@ -103,7 +112,12 @@ internal static class Program
         };
 
         int exitCode = Run(result);
-        result["steps"] = Steps;
+        result["steps"] = Steps.ToList();
+
+        // Alternative (b) probe: can this user create its own copy of the scheme, change it and activate it?
+        Steps.Clear();
+        TryDuplicateScheme();
+        result["alternativeDuplicateScheme"] = Steps.ToList();
         result["exitCode"] = exitCode;
         result["verdict"] = exitCode switch
         {
@@ -166,6 +180,32 @@ internal static class Program
 
         if (writeRefused) return 2;
         return verifyFailed ? 1 : 0;
+    }
+
+    private static void TryDuplicateScheme()
+    {
+        if (Native.PowerGetActiveScheme(IntPtr.Zero, out IntPtr pActive) != 0) return;
+        Guid original = Marshal.PtrToStructure<Guid>(pActive);
+        Native.LocalFree(pActive);
+
+        IntPtr pCopy = IntPtr.Zero;
+        uint e = Native.PowerDuplicateScheme(IntPtr.Zero, ref original, ref pCopy);
+        Steps.Add(new("PowerDuplicateScheme", e, Describe(e)));
+        if (e != 0 || pCopy == IntPtr.Zero) return;
+        Guid copy = Marshal.PtrToStructure<Guid>(pCopy);
+        Native.LocalFree(pCopy);
+        try
+        {
+            Write(copy, ac: true, Native.ActionDoNothing, "copy: write AC=0");
+            Apply(copy, "PowerSetActiveScheme (activate copy)");
+            Read(copy, "copy", out _, out _);
+        }
+        finally
+        {
+            Apply(original, "PowerSetActiveScheme (back to original)");
+            uint d = Native.PowerDeleteScheme(IntPtr.Zero, ref copy);
+            Steps.Add(new("PowerDeleteScheme (copy)", d, Describe(d)));
+        }
     }
 
     private static bool Read(Guid scheme, string label, out uint ac, out uint dc)

@@ -32,6 +32,15 @@ New-Item -ItemType Directory "$WorkDir\bin", "$WorkDir\out", "$WorkDir\layout" |
 Copy-Item "$PublishDir\*" "$WorkDir\bin" -Recurse
 icacls $WorkDir /grant '*S-1-5-32-545:(OI)(CI)M' /T | Out-Null   # BUILTIN\Users: modify
 
+# --- Diagnostics: edition and power scheme security descriptors (who may write / activate) -------
+(Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, ProductType | Format-List | Out-String) |
+    Set-Content "$WorkDir\out\00-os.txt"
+& { 'SCHEME_CURRENT:'; powercfg /getsecuritydescriptor SCHEME_CURRENT
+    'ACTION_SETACTIVE:'; powercfg /getsecuritydescriptor ACTION_SETACTIVE
+    'ACTION_CREATE:'; powercfg /getsecuritydescriptor ACTION_CREATE
+    'ACTION_DEFAULT:'; powercfg /getsecuritydescriptor ACTION_DEFAULT } *>&1 |
+    Set-Content "$WorkDir\out\00-security-descriptors.txt"
+
 # --- 1. bare exe, current user ----------------------------------------------------------------------
 & "$WorkDir\bin\KeepLid.Spike.exe" --out "$WorkDir\out\bare-admin.json" | Out-Null
 Write-Host "bare-admin exit code: $LASTEXITCODE"
@@ -85,8 +94,11 @@ $inner = @"
 `$ErrorActionPreference = 'Continue'
 Add-AppxPackage -Path '$WorkDir\spike.msix'
 Get-AppxPackage -Name 'KeepLid.Spike' | Format-List PackageFullName, InstallLocation
-`$alias = Join-Path `$env:LOCALAPPDATA 'Microsoft\WindowsApps\keeplid-spike.exe'
-for (`$i = 0; `$i -lt 20 -and -not (Test-Path `$alias); `$i++) { Start-Sleep -Milliseconds 500 }
+# NB: Start-Process -Credential inherits the caller's environment, so `$env:LOCALAPPDATA would point to the
+# admin's profile. Resolve the folder from this user's token instead.
+`$alias = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Microsoft\WindowsApps\keeplid-spike.exe'
+"alias: `$alias"
+for (`$i = 0; `$i -lt 20 -and -not (Test-Path `$alias -ErrorAction SilentlyContinue); `$i++) { Start-Sleep -Milliseconds 500 }
 & `$alias --out '$WorkDir\out\msix-standard.json'
 "exit code: `$LASTEXITCODE"
 "@
