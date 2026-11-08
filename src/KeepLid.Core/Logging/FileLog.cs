@@ -24,7 +24,7 @@ public sealed class FileLog(string path, long maxBytes = FileLog.DefaultMaxBytes
     public void Warn(string message) => Write("WARN ", message);
 
     public void Error(string message, Exception? ex = null) =>
-        Write("ERROR", ex is null ? message : $"{message}: {ex.GetType().Name}: {ex.Message}");
+        Write("ERROR", ex is null ? message : $"{message}: {ex}");
 
     private void Write(string level, string message)
     {

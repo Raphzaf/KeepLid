@@ -40,6 +40,7 @@ public partial class App : Application
     private LicenseService _license = null!;
     private Process? _watchdog;
     private bool _exiting;
+    private int _exitCode;
 
     // Choices shown in the menu while inactive; used for the next session.
     private bool _nextKeepDisplayOn;
@@ -109,8 +110,55 @@ public partial class App : Application
         _license = new LicenseService(_log);
         _ = _license.RefreshAsync();
 
+        if (e.Args.Contains(UiSelfTestArgument))
+        {
+            Dispatcher.BeginInvoke(RunUiSelfTest, DispatcherPriority.ApplicationIdle);
+            return;
+        }
+
         if (!_settings.FirstRunCompleted) ShowWelcome();
         ScheduleMemoryTrim();
+    }
+
+    /// <summary>"keeplid --ui-selftest": opens and closes every window and builds the tray menu, logs the result,
+    /// then exits with the number of failures (used by build/smoke-test.ps1).</summary>
+    internal const string UiSelfTestArgument = "--ui-selftest";
+
+    private void RunUiSelfTest()
+    {
+        var checks = new (string Name, Action Run)[]
+        {
+            ("welcome", () => Open(new WelcomeWindow(this))),
+            ("settings", () => Open(new SettingsWindow(this))),
+            ("lid guide", () => Open(new LidGuideWindow(this))),
+            ("process picker", () => Open(new ProcessPickerWindow(this))),
+            ("custom duration", () => Open(new CustomDurationWindow(this))),
+            ("tray menu", () => TrayMenu.Build(_tray.Menu, this)),
+        };
+        int failures = 0;
+        foreach (var (name, run) in checks)
+        {
+            try
+            {
+                run();
+                _log.Info($"UI self-test: {name} OK");
+            }
+            catch (Exception ex)
+            {
+                failures++;
+                _log.Error($"UI self-test: {name} FAILED", ex);
+            }
+        }
+        _log.Info(failures == 0 ? "UI self-test passed" : $"UI self-test failed ({failures})");
+        _exitCode = failures;
+        Quit();
+
+        static void Open(Window w)
+        {
+            w.Show();
+            w.UpdateLayout();
+            w.Close();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -250,7 +298,7 @@ public partial class App : Application
         _exiting = true;
         _log.Info("Quit requested");
         Cleanup();
-        Shutdown();
+        Shutdown(_exitCode);
     }
 
     // ---------------------------------------------------------------------------------------------

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:res="clr-namespace:KeepLid.Core.Resources;assembly=KeepLid.Core"
         Style="{StaticResource KeepLidWindow}"
+        WindowStartupLocation="CenterScreen"
         Title="{x:Static res:Strings.Guide_Title}"
         Width="540">
     <!-- Shown when Windows refuses lid action writes without elevation (Phase 0 result, option a+). -->

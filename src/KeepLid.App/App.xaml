@@ -3,14 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-        <!-- Shared look for the few small windows. System colours keep high-contrast themes working. -->
+        <!-- Shared look for the few small windows. System colours keep high-contrast themes working.
+             Only dependency properties can be set here: WindowStartupLocation is a plain CLR property,
+             so each window sets it itself (a Setter for it throws a XamlParseException at load time). -->
         <Style TargetType="Window" x:Key="KeepLidWindow">
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="13" />
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
             <Setter Property="ResizeMode" Value="NoResize" />
             <Setter Property="SizeToContent" Value="Height" />
-            <Setter Property="WindowStartupLocation" Value="CenterScreen" />
             <Setter Property="ShowInTaskbar" Value="True" />
         </Style>
         <Style TargetType="Button">

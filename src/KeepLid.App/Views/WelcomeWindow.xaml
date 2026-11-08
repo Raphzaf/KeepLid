@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:res="clr-namespace:KeepLid.Core.Resources;assembly=KeepLid.Core"
         Style="{StaticResource KeepLidWindow}"
+        WindowStartupLocation="CenterScreen"
         Title="{x:Static res:Strings.Welcome_Title}"
         Width="520">
     <!-- First launch: 3 steps (what it does, what the lid mode changes, safety tip). -->

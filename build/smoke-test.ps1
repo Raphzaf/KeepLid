@@ -108,8 +108,16 @@ if ($title -ne 'Welcome to KeepLid') { $failures += "welcome window not shown on
 Write-Host '----- log.txt (after first launch) -----'; Get-Content $log | Select-Object -Last 15 | Write-Host
 $proc = $all | Select-Object -First 1
 
+# --- UI self-test: every window opens without error ------------------------------------------------------
+if ($proc) { Stop-Process -Id $proc.Id -Force; Start-Sleep -Seconds 1; $proc = $null }
+$selfTest = Start-Process -FilePath $alias -ArgumentList '--ui-selftest' -PassThru
+for ($i = 0; $i -lt 60 -and -not (Select-String -Path $log -Pattern 'UI self-test (passed|failed)' -Quiet); $i++) { Start-Sleep -Milliseconds 500 }
+Write-Host '----- UI self-test -----'; Select-String -Path $log -Pattern 'UI self-test' | ForEach-Object { Write-Host $_.Line }
+if (-not (Select-String -Path $log -Pattern 'UI self-test passed' -Quiet)) { $failures += 'UI self-test did not pass' }
+Get-Process -Name KeepLid -ErrorAction SilentlyContinue | Stop-Process -Force
+
 # --- Cleanup -----------------------------------------------------------------------------------------
-if ($proc) { Stop-Process -Id $proc.Id -Force }
+if ($proc) { Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue }
 Remove-AppxPackage -Package $pkg.PackageFullName
 
 if ($failures) { $failures | ForEach-Object { Write-Error $_ -ErrorAction Continue }; exit 1 }

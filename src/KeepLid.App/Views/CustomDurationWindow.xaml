@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:res="clr-namespace:KeepLid.Core.Resources;assembly=KeepLid.Core"
         Style="{StaticResource KeepLidWindow}"
+        WindowStartupLocation="CenterScreen"
         Title="{x:Static res:Strings.Custom_Title}"
         Width="360">
     <StackPanel Margin="20,16">
