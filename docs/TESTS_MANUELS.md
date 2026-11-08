@@ -24,7 +24,7 @@ powercfg /getactivescheme            # mode d'alimentation actif
 powercfg /requests                   # KeepLid doit apparaître sous SYSTEM (et DISPLAY si « écran allumé ») quand actif
 ```
 
-Dossier de données de l'app installée : `%LOCALAPPDATA%\Packages\KeepLid_*\LocalCache\Local\KeepLid\`
+Dossier de données de l'app installée : `%LOCALAPPDATA%\Packages\RaphZaf.KeepLid_2yg2xyjs83sm8\LocalCache\Local\KeepLid\`
 (`settings.json`, `restore.json` pendant le mode capot uniquement, `log.txt`). Réglages › « Ouvrir le journal » y mène.
 
 Noter pour chaque test : édition et build de Windows (`winver`), architecture, compte (admin avec UAC / standard),

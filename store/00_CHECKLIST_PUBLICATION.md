@@ -12,7 +12,7 @@ Ordre recommandé. Chaque case renvoie au fichier prêt à copier-coller.
 
 ## B. Créer le produit
 - [ ] *Applications et jeux › + Nouveau produit › Application MSIX ou PWA*
-- [ ] Réserver le nom **KeepLid** → `store/01_identite/identite.md`
+- [x] Réserver le nom **KeepLid** → `store/01_identite/identite.md`
 - [ ] Recopier *Gestion des produits › Identité du produit* (Name, Publisher, PublisherDisplayName) dans `identite.md`
 
 ## C. Construire le paquet Store

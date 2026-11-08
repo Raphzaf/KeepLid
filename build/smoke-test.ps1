@@ -25,7 +25,7 @@ powercfg -attributes SUB_BUTTONS LIDACTION -ATTRIB_HIDE
 # --- Install ---------------------------------------------------------------------------------------
 Import-Certificate -FilePath $CertificatePath -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
 Add-AppxPackage -Path $MsixPath
-$pkg = Get-AppxPackage -Name 'KeepLid*' | Select-Object -First 1
+$pkg = Get-AppxPackage -Name '*KeepLid*' | Select-Object -First 1
 Write-Host "Installed $($pkg.PackageFullName)"
 $dataDir = Join-Path $env:LOCALAPPDATA "Packages\$($pkg.PackageFamilyName)\LocalCache\Local\KeepLid"
 New-Item -ItemType Directory -Force $dataDir | Out-Null

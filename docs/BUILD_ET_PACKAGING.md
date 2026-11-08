@@ -96,7 +96,7 @@ manifeste (ex. `CN=1A2B3C4D-…`) comme `-Subject` ci-dessous.
    ```
 4. Installer : double-clic sur `artifacts\KeepLid_1.0.0.0_x64.msix` (ou le `.msixbundle`), ou
    `Add-AppxPackage .\artifacts\KeepLid_1.0.0.0_x64.msix`. Lancer depuis le menu Démarrer ou `keeplid` (Win+R).
-5. Désinstaller : `Get-AppxPackage KeepLid* | Remove-AppxPackage`.
+5. Désinstaller : `Get-AppxPackage *KeepLid* | Remove-AppxPackage`.
 
 Les `.pfx` sont exclus du dépôt (`.gitignore`). Le paquet de la CI (artefact `keeplid-packages`) est signé avec un
 certificat jetable ; `KeepLidTest.cer` est fourni dans l'artefact pour l'installer.
