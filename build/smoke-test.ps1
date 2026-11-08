@@ -90,8 +90,26 @@ if (Test-Path $log) { Write-Host '----- log.txt -----'; Get-Content $log | Write
 else { $failures += 'log.txt not found in the package LocalCache folder' }
 if ((Test-Path $log) -and -not (Select-String -Path $log -Pattern 'Lid action restored' -Quiet)) { $failures += 'log does not mention the restore' }
 
-# --- Cleanup -----------------------------------------------------------------------------------------
+# --- First launch (no settings.json): the welcome window must appear and the app must stay alive -------
 Stop-Process -Id $proc.Id -Force
+Start-Sleep -Seconds 1
+Remove-Item (Join-Path $dataDir 'settings.json') -ErrorAction SilentlyContinue
+Start-Process -FilePath $alias
+$proc = $null; $title = ''
+for ($i = 0; $i -lt 40 -and -not $title; $i++) {
+    Start-Sleep -Milliseconds 500
+    $proc = Get-Process -Name KeepLid -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle } | Select-Object -First 1
+    if ($proc) { $title = $proc.MainWindowTitle }
+}
+$all = @(Get-Process -Name KeepLid -ErrorAction SilentlyContinue)
+Write-Host "First launch: $($all.Count) KeepLid process(es), main window title: '$title'"
+if (-not $all) { $failures += 'KeepLid exited on first launch' }
+if ($title -ne 'Welcome to KeepLid') { $failures += "welcome window not shown on first launch (title '$title')" }
+Write-Host '----- log.txt (after first launch) -----'; Get-Content $log | Select-Object -Last 15 | Write-Host
+$proc = $all | Select-Object -First 1
+
+# --- Cleanup -----------------------------------------------------------------------------------------
+if ($proc) { Stop-Process -Id $proc.Id -Force }
 Remove-AppxPackage -Package $pkg.PackageFullName
 
 if ($failures) { $failures | ForEach-Object { Write-Error $_ -ErrorAction Continue }; exit 1 }
